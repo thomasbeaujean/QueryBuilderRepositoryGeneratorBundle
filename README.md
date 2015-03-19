@@ -9,6 +9,7 @@ See the create queries section for an example.
 
 ## Mandatory configuration
 Add the bundles you want: 
+
 		query_builder_repository_generator:
     		bundles: 
         		- "<<YourBundleName>>"
@@ -33,9 +34,9 @@ The templates used by the generator can be set with these configurations.
 The extra_column template have the following variables:
 
 		'entity' => $tableName,
-    		'entityDql' => lcfirst($tableName),
-        	'column' => ucfirst($columnName),
-        	'columnDql' => $columnName
+		'entityDql' => lcfirst($tableName),
+		'column' => ucfirst($columnName),
+		'columnDql' => $columnName
 
 # Use generated repositories
 
