@@ -1,0 +1,2 @@
+# QueryBuilderRepositoryGeneratorBundle
+QueryBuilderRepositoryGeneratorBundle
