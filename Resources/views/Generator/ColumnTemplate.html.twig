@@ -1,0 +1,36 @@
+
+    public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    {
+        //get a uniq index
+        $index = self::getParameterIndex();
+        $parameterName = $columnName.$index;
+
+        unset($index);
+
+        if ($value === null) {
+            $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+        } else {
+            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$columnName);
+            $qb->setParameter($columnName, $value);
+        }
+
+        return $qb;
+    }
+
+    public static function filterIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    {
+        //get a uniq index
+        $index = self::getParameterIndex();
+        $parameterName = $columnName.$index;
+
+        unset($index);
+
+        if ($value === null) {
+            $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+        } else {
+            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$columnName.')');
+            $qb->setParameter($columnName, $value);
+        }
+
+        return $qb;
+    }
