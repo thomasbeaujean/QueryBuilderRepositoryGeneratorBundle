@@ -65,3 +65,6 @@ Your repository has now some predefined function like "filterById", "filterInId"
        //filter on the tag entity
        TagRepository::filterById($qb, $tagButton);
        
+# Regenerate files
+
+The files are regenerated during a clear-cache
