@@ -24,12 +24,14 @@ Those bundles will have the repository generated in the cache directory, in the 
 				bottom_repository: "QueryBuilderRepositoryGeneratorBundle:Generator:BottomRepositoryTemplate.html.twig"
 
 The templates used by the generator can be set with these configurations.
+
 		top_repository => The beginning of the repository file
 		column => The template used for each column
 		extra_column => A custom template of your choice
 		bottom_repository => The end of the repository file
 
 The extra_column template have the following variables:
+
 		'entity' => $tableName,
     		'entityDql' => lcfirst($tableName),
         	'column' => ucfirst($columnName),
@@ -40,6 +42,7 @@ The extra_column template have the following variables:
 In your Entity Repository, use the generated repository instead of the classic EntityRepository:
 
 Remove the use EntityRepository and use this "use":
+
 		use tbn\QueryBuilderRepositoryGeneratorBundle\<<YourBundleName>>\Repository\<<Your Entity Name>>Repository as EntityRepository;
 
 Your repository has now some predefined function like "filterById", "filterInId" for all the columns.
