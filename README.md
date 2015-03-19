@@ -1,7 +1,7 @@
 # QueryBuilderRepositoryGeneratorBundle
 The QueryBuilderRepositoryGeneratorBundle generates Repositories in the cache that have predefined functions.
 
-The functions allows to filter on the columns of the entity with a query builder.
+The functions allow to filter on the columns of the entity with a query builder.
 
 See the create queries section for an example.
 
