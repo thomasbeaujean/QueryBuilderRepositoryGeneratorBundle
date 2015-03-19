@@ -5,6 +5,13 @@ The functions allow to filter on the columns of the entity with a query builder.
 
 See the create queries section for an example.
 
+# Installation
+
+## Import the bundle using composer
+    "tbn/query-builder-repository-generator-bundle"
+## Import the bundle in your AppKernel
+    new tbn\QueryBuilderRepositoryGeneratorBundle\QueryBuilderRepositoryGeneratorBundle(),
+    
 # Configuration
 
 ## Mandatory configuration
