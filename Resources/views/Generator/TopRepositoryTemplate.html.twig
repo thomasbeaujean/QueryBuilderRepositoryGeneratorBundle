@@ -28,3 +28,31 @@ class {{ tableName }}Repository extends EntityRepository
 
         return self::$parameterIndex;
     }
+
+    /**
+     * Get a new query builder
+     *
+     * @return integer The index
+     */
+    public function getNewQueryBuilder()
+    {
+        $qb = $this->createQueryBuilder('{{ entityDql }}');
+
+        return $qb;
+    }
+
+    /**
+     * Get the result of the query builder
+     *
+     * @return unknown The results
+     */
+    public static function getQueryBuilderResult(QueryBuilder $qb)
+    {
+         $query = $qb->getQuery();
+         $results = $query->getResult();
+
+         return $results;
+    }
+
+
+

@@ -81,13 +81,15 @@ class RepositoryGenerator
             $tableNames = $description['tableNames'];
 
             foreach ($tableNames as $tableIndex => $tableName) {
-                $renderedTemplate = $twig->render($this->topRepositoryTemple, array('tableName' => $tableName, 'bundleName' => $bundleName));
+                $entityDql = lcfirst($tableName);
+
+                $renderedTemplate = $twig->render($this->topRepositoryTemple, array('tableName' => $tableName, 'bundleName' => $bundleName, 'entityDql' => $entityDql));
 
                 //parse the columns
                 foreach ($fieldNames[$tableIndex] as $columnName) {
                     $parameters = array(
                         'entity' => $tableName,
-                        'entityDql' => lcfirst($tableName),
+                        'entityDql' => $entityDql,
                         'column' => ucfirst($columnName),
                         'columnDql' => $columnName
                     );
