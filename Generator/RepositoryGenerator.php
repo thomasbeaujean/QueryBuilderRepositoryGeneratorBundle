@@ -96,7 +96,6 @@ class RepositoryGenerator
 
                     //if an extra template has been provided
                     if ($this->extraColumnTemplate !== '') {
-                        zdebug($this->extraColumnTemplate);
                         //we render this extra template for the columns
                         $renderedTemplate .= $twig->render($this->extraColumnTemplate, $parameters);
                     }
