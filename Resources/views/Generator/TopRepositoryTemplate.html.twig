@@ -54,5 +54,68 @@ class {{ tableName }}Repository extends EntityRepository
          return $results;
     }
 
+    /**
+     * Get the SingleResult of the query builder
+     *
+     * @return unknown The results
+     */
+    public static function getQueryBuilderSingleResult(QueryBuilder $qb)
+    {
+         $query = $qb->getQuery();
+         $results = $query->getSingleResult();
 
+         return $results;
+    }
+
+    /**
+     * Get the OneOrNullResult of the query builder
+     *
+     * @return unknown The results
+     */
+    public static function getQueryBuilderOneOrNullResult(QueryBuilder $qb)
+    {
+         $query = $qb->getQuery();
+         $results = $query->getOneOrNullResult();
+
+         return $results;
+    }
+
+    /**
+     * Get the getArrayResult of the query builder
+     *
+     * @return unknown The results
+     */
+    public static function getQueryBuilderArrayResult(QueryBuilder $qb)
+    {
+         $query = $qb->getQuery();
+         $results = $query->getArrayResult();
+
+         return $results;
+    }
+
+    /**
+     * Get the ScalarResult of the query builder
+     *
+     * @return unknown The results
+     */
+    public static function getQueryBuilderScalarResult(QueryBuilder $qb)
+    {
+         $query = $qb->getQuery();
+         $results = $query->getScalarResult();
+
+         return $results;
+    }
+
+    /**
+     * Get the SingleScalarResult of the query builder
+     *
+     * @return unknown The results
+     */
+    public static function getQueryBuilderSingleScalarResult(QueryBuilder $qb)
+    {
+         $query = $qb->getQuery();
+         $results = $query->getSingleScalarResult();
+
+         return $results;
+    }
 
