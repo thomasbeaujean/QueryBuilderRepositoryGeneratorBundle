@@ -119,3 +119,32 @@ class {{ tableName }}Repository extends EntityRepository
          return $results;
     }
 
+    /**
+     * Does this entity exists in database
+     * It guess that the entity has an ID property has identifier
+     *
+     * @param DoctrineEntity $entity
+     * @return boolean The entity exists
+     */
+    public function exists($entity)
+    {
+        if (null === $entity) {
+            throw new \Exception('The entity parameter must be provided, it can not be null');
+        }
+
+        $exists = false;
+
+        $qb = $this->getNewQueryBuilder();
+        $entityId = $entity->getId();
+        self::filterById($qb, $entityId);
+
+        $result = self::getQueryBuilderOneOrNullResult($qb);
+
+        if (null !==  $result) {
+            //the entity was found
+            $exists = true;
+        }
+
+        return $exists;
+    }
+
