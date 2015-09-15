@@ -28,7 +28,7 @@
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
-            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$columnName.')');
+            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$value.')');
             $qb->setParameter($columnName, $value);
         }
 
