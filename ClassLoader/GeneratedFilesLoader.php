@@ -7,7 +7,7 @@ namespace tbn\QueryBuilderRepositoryGeneratorBundle\ClassLoader;
  */
 class GeneratedFilesLoader
 {
-    protected $base_path;
+    protected $basePath;
 
     /**
      * Registers this instance as an autoloader.
@@ -21,12 +21,12 @@ class GeneratedFilesLoader
 
     /**
      *
-     * @param string $base_path
+     * @param string $basePath
      * @return string
      */
-    public function setBasePath($base_path)
+    public function setBasePath($basePath)
     {
-        return $this->base_path = $base_path;
+        return $this->basePath = $basePath;
     }
 
     /**
@@ -38,10 +38,10 @@ class GeneratedFilesLoader
     public function loadClass($class)
     {
         if (0 === strpos($class, 'tbn')) {
-            $file_path = $this->base_path . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+            $filePath = $this->basePath.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $class).'.php';
 
-            if (file_exists($file_path)) {
-                require $file_path;
+            if (file_exists($filePath)) {
+                require $filePath;
             }
         }
     }

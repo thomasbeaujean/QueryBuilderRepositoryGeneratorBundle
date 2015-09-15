@@ -31,6 +31,8 @@ class QueryBuilderRepositoryGeneratorBundle extends Bundle
     /**
      * (non-PHPdoc)
      * @see \Symfony\Component\HttpKernel\Bundle\Bundle::build()
+     *
+     * @param ContainerBuilder $container
      */
     public function build(ContainerBuilder $container)
     {
@@ -47,9 +49,9 @@ class QueryBuilderRepositoryGeneratorBundle extends Bundle
     {
         if (!$this->classLoaderInitialized) {
             $this->classLoaderInitialized = true;
-            $AdmingeneratedClassLoader = new GeneratedFilesLoader();
-            $AdmingeneratedClassLoader->setBasePath($container->getParameter('kernel.cache_dir'));//.'/tbn\QueryBuilderRepositoryGeneratorBundle\Repository');
-            $AdmingeneratedClassLoader->register();
+            $admingeneratedClassLoader = new GeneratedFilesLoader();
+            $admingeneratedClassLoader->setBasePath($container->getParameter('kernel.cache_dir'));
+            $admingeneratedClassLoader->register();
         }
     }
 }

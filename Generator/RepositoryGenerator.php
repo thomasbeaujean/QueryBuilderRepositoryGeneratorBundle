@@ -91,7 +91,7 @@ class RepositoryGenerator
                         'entity' => $tableName,
                         'entityDql' => $entityDql,
                         'column' => ucfirst($columnName),
-                        'columnDql' => $columnName
+                        'columnDql' => $columnName,
                     );
 
                     $renderedTemplate .= $twig->render($this->columnTemplate, $parameters);
@@ -130,7 +130,11 @@ class RepositoryGenerator
 
     /**
      * getDatabaseDescription
+     *
+     * @param array         $bundles
      * @param EntityManager $customEm
+     *
+     * @return array
      */
     public function getDatabaseDescription($bundles, EntityManager $customEm = null)
     {
