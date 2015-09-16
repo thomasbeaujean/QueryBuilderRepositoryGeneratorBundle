@@ -148,3 +148,15 @@ class {{ tableName }}Repository extends EntityRepository
         return $exists;
     }
 
+    /**
+     * Get a new delete query builder
+     * @return QueryBuilder
+     */
+    public function getDeleteQueryBuilder()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->delete($this->_entityName, '{{ entityDql }}');
+
+        return $qb;
+    }
+
