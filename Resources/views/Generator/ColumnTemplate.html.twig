@@ -28,8 +28,8 @@
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
-            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$value.')');
-            $qb->setParameter($columnName, $value);
+            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$parameterName.')');
+            $qb->setParameter($parameterName, $value);
         }
 
         return $qb;
@@ -46,8 +46,8 @@
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
         } else {
-            $qb->andWhere($entityName.'.'.$columnName.' NOT IN (:'.$value.')');
-            $qb->setParameter($columnName, $value);
+            $qb->andWhere($entityName.'.'.$columnName.' NOT IN (:'.$parameterName.')');
+            $qb->setParameter($parameterName, $value);
         }
 
         return $qb;
