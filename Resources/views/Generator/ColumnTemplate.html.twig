@@ -34,3 +34,21 @@
 
         return $qb;
     }
+
+    public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    {
+        //get a uniq index
+        $index = self::getParameterIndex();
+        $parameterName = $columnName.$index;
+
+        unset($index);
+
+        if ($value === null) {
+            $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
+        } else {
+            $qb->andWhere($entityName.'.'.$columnName.' NOT IN (:'.$value.')');
+            $qb->setParameter($columnName, $value);
+        }
+
+        return $qb;
+    }
