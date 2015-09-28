@@ -2,13 +2,12 @@
 
 namespace tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
-
 use Doctrine\ORM\EntityManager;
-
 use Doctrine\Bundle\DoctrineBundle\Mapping\DisconnectedMetadataFactory;
 use Symfony\Component\HttpKernel\Kernel;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\Filesystem\Filesystem;
+use tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
 
 /**
  *
@@ -19,17 +18,22 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class RepositoryGenerator
 {
+    protected $configurator = null;
+
     /**
      *
-     * @param unknown $topRepositoryTemple
-     * @param unknown $columnTemplate
-     * @param unknown $bottomRepositoryTemplate
-     * @param unknown $doctrine
-     * @param unknown $em
-     * @param unknown $kernel
-     * @param unknown $twig
+     * @param type         $topRepositoryTemple
+     * @param type         $columnTemplate
+     * @param type         $extraColumnTemplate
+     * @param type         $bottomRepositoryTemplate
+     * @param type         $bundles
+     * @param type         $doctrine
+     * @param type         $em
+     * @param type         $kernel
+     * @param type         $twig
+     * @param Configurator $configurator
      */
-    public function __construct($topRepositoryTemple, $columnTemplate, $extraColumnTemplate, $bottomRepositoryTemplate, $bundles, $doctrine, $em, $kernel, $twig)
+    public function __construct($topRepositoryTemple, $columnTemplate, $extraColumnTemplate, $bottomRepositoryTemplate, $bundles, $doctrine, $em, $kernel, $twig, Configurator $configurator)
     {
         $this->doctrine = $doctrine;
         $this->em = $em;
@@ -44,6 +48,8 @@ class RepositoryGenerator
         $this->columnTemplate = $columnTemplate;
         $this->extraColumnTemplate = $extraColumnTemplate;
         $this->bottomRepositoryTemplate = $bottomRepositoryTemplate;
+
+        $this->configurator = $configurator;
     }
 
     /**
@@ -66,6 +72,7 @@ class RepositoryGenerator
     {
         //the bundles to scan
         $bundles = $this->bundles;
+        $configurator = $this->configurator;
 
         //services
         $twig = $this->twig;
@@ -79,9 +86,10 @@ class RepositoryGenerator
 
             $fieldNames = $description['fieldNames'];
             $tableNames = $description['tableNames'];
+            $entityNames = $description['entityNames'];
 
             foreach ($tableNames as $tableIndex => $tableName) {
-                $entityDql = lcfirst($tableName);
+                $entityDql = $configurator->getEntityDqlName($entityNames[$tableIndex], $tableName);
 
                 $renderedTemplate = $twig->render($this->topRepositoryTemple, array('tableName' => $tableName, 'bundleName' => $bundleName, 'entityDql' => $entityDql));
 
@@ -150,6 +158,7 @@ class RepositoryGenerator
         $check['fields'] = array();
         $check['fieldNames'] = array();
         $check['tableNames'] = array();
+        $check['entityNames'] = array();
 
         $ignoreClasses = array();
 
@@ -167,6 +176,7 @@ class RepositoryGenerator
                 $nameSpaceExploded = explode('\\', $fieldMapping->name);
                 $tableNameSpace = $nameSpaceExploded[count($nameSpaceExploded) - 1];//get the last item
                 $check['tableNames'][$tableName] = $tableNameSpace;
+                $check['entityNames'][$tableName] = $fieldMapping->name;
 
                 $check['fieldNames'][$tableName] = array();
                 foreach ($fieldMapping->fieldNames as $columnName => $fieldName) {

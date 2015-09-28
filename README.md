@@ -11,16 +11,16 @@ See the create queries section for an example.
     "tbn/query-builder-repository-generator-bundle"
 ## Import the bundle in your AppKernel
     new tbn\QueryBuilderRepositoryGeneratorBundle\QueryBuilderRepositoryGeneratorBundle(),
-    
+
 # Configuration
 
 ## Mandatory configuration
-Add the bundles you want: 
+Add the bundles you want:
 
 		query_builder_repository_generator:
-    		bundles: 
+    		bundles:
         		- "<<YourBundleName>>"
-Those bundles will have the repository generated in the cache directory, in the tbn folder. Check the content by yourself. 
+Those bundles will have the repository generated in the cache directory, in the tbn folder. Check the content by yourself.
 
 ## Optional configuration
 
@@ -30,6 +30,9 @@ Those bundles will have the repository generated in the cache directory, in the 
 				column: "QueryBuilderRepositoryGeneratorBundle:Generator:ColumnTemplate.html.twig"
 				extra_column: "" #add your custom function with your custom template
 				bottom_repository: "QueryBuilderRepositoryGeneratorBundle:Generator:BottomRepositoryTemplate.html.twig"
+                mapping:
+                        - 'AppBundle\Entity\Member':
+                                querybuilder_name: 'memberEntity' # the name of the entity used in the queryBuilder
 
 The templates used by the generator can be set with these configurations.
 
@@ -57,21 +60,21 @@ Your repository has now some predefined function like "filterById", "filterInId"
 
 
 # Create queries
- 
+
  Example:
- 
+
 		$qb = $this->createQueryBuilder('document');
 
 		//filter on current user (where XX = YY)
        DocumentRepository::filterByUser($qb, $user);
        //filter on the extension list (where xxx IN () )
        DocumentRepository::filterInExtension($qb, $extensionList);
-       
+
        //Join the tag entity
        $qb->join('document.tags', 'tag');
        //filter on the tag entity
        TagRepository::filterById($qb, $tagButton);
-       
+
 # Regenerate files
 
 The files are regenerated during a clear-cache

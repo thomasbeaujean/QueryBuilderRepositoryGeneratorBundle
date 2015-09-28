@@ -23,7 +23,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('query_builder_repository_generator');
 
-
         $rootNode
             ->children()
                 ->arrayNode('bundles')
@@ -46,6 +45,16 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('bottom_repository')
                             ->defaultValue("QueryBuilderRepositoryGeneratorBundle:Generator:BottomRepositoryTemplate.html.twig")
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('mapping')
+                    ->prototype('array')
+                        ->prototype('array')
+                            ->children()
+                                ->scalarNode('querybuilder_name')
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()

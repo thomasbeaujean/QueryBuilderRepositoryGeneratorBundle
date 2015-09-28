@@ -11,6 +11,11 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@kernel"
             - "@twig"
+            - "@tbn_qbrg.configuration.configurator"
+    tbn_qbrg.configuration.configurator:
+        class: tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator
+        arguments:
+            - "%tbn_qbrg.generator.template.entity_configuration%"
     tbn_qbrg.generator.repository_generator_warmer:
         class: tbn\QueryBuilderRepositoryGeneratorBundle\CacheWarmer\RepositoryGeneratorWarmer
         arguments:
