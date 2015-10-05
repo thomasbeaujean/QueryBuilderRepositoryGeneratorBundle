@@ -4,8 +4,6 @@ namespace tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Bundle\DoctrineBundle\Mapping\DisconnectedMetadataFactory;
-use Symfony\Component\HttpKernel\Kernel;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\Filesystem\Filesystem;
 use tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
 
