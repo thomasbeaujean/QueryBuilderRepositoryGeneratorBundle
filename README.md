@@ -30,9 +30,9 @@ Those bundles will have the repository generated in the cache directory, in the 
 				column: "QueryBuilderRepositoryGeneratorBundle:Generator:ColumnTemplate.html.twig"
 				extra_column: "" #add your custom function with your custom template
 				bottom_repository: "QueryBuilderRepositoryGeneratorBundle:Generator:BottomRepositoryTemplate.html.twig"
-                mapping:
-                        - 'AppBundle\Entity\Member':
-                                querybuilder_name: 'memberEntity' # the name of the entity used in the queryBuilder
+		mapping:
+        	- 'AppBundle\Entity\Member':
+                querybuilder_name: 'memberEntity' # the name of the entity used in the queryBuilder
 
 The templates used by the generator can be set with these configurations.
 
