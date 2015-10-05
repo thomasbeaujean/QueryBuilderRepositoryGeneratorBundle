@@ -31,16 +31,17 @@ Those bundles will have the repository generated in the cache directory, in the 
 				extra_column: "" #add your custom function with your custom template
 				bottom_repository: "QueryBuilderRepositoryGeneratorBundle:Generator:BottomRepositoryTemplate.html.twig"
 		mapping:
-        	- 'AppBundle\Entity\Member':
-                querybuilder_name: 'memberEntity' # the name of the entity used in the queryBuilder
+			- 'AppBundle\Entity\Member':
+				querybuilder_name: 'memberEntity' # the name of the entity used in the queryBuilder
 
 ### The repository extends
 
 You can specify a class to extends for each entity.
 
-                repositories_extensions:
-                        - "Specitive\FrontBundle\Entity\Item": #the entity class
-                                extension_class: "\\Gedmo\\Tree\\Entity\\Repository\\MaterializedPathRepository" #the class to extends
+
+		repositories_extensions:
+			- "Specitive\FrontBundle\Entity\Item": #the entity class
+				extension_class: "\\Gedmo\\Tree\\Entity\\Repository\\MaterializedPathRepository" #the class to extends
 
 The templates used by the generator can be set with these configurations.
 
