@@ -1,9 +1,8 @@
 {
     "name": "tbn/query-builder-repository-generator-bundle",
-    "description": "Generate filters for queryBuilder in a repository",   
-    
+    "description": "Generate filters for queryBuilder in a repository",
     "autoload": {
-        "psr-0": { "tbn\\QueryBuilderRepositoryGeneratorBundle": "" }
+        "psr-4": { "tbn\\QueryBuilderRepositoryGeneratorBundle\\": "" }
     },
     "target-dir": "tbn/QueryBuilderRepositoryGeneratorBundle"
 }
