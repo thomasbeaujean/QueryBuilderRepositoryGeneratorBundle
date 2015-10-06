@@ -9,15 +9,18 @@ namespace tbn\QueryBuilderRepositoryGeneratorBundle\Configuration;
  */
 class Configurator
 {
+    const DEFAULT_REPOSITORY_EXTEND = '\\Doctrine\\ORM\\EntityRepository';
     protected $entityConfigurations = [];
 
     /**
      *
      * @param type $entityConfigurations
+     * @param type $repositoryExtensions
      */
-    public function __construct($entityConfigurations)
+    public function __construct($entityConfigurations, $repositoryExtensions)
     {
         $this->entityConfigurations = $entityConfigurations;
+        $this->repositoryExtensions = $repositoryExtensions;
     }
 
     /**
@@ -36,5 +39,22 @@ class Configurator
         }
 
         return $entityDqlName;
+    }
+
+    /**
+     *
+     * @param string $entityName
+     *
+     * @return string The extends repository
+     */
+    public function getExtendRepository($entityName)
+    {
+        if (isset($this->repositoryExtensions[$entityName])) {
+            $extendRepository = $this->repositoryExtensions[$entityName]['extension_class'];
+        } else {
+            $extendRepository = self::DEFAULT_REPOSITORY_EXTEND;
+        }
+
+        return $extendRepository;
     }
 }

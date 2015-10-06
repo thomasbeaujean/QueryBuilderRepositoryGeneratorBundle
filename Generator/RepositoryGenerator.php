@@ -89,7 +89,9 @@ class RepositoryGenerator
             foreach ($tableNames as $tableIndex => $tableName) {
                 $entityDql = $configurator->getEntityDqlName($entityNames[$tableIndex], $tableName);
 
-                $renderedTemplate = $twig->render($this->topRepositoryTemple, array('tableName' => $tableName, 'bundleName' => $bundleName, 'entityDql' => $entityDql));
+                $extendClass = $this->configurator->getExtendRepository($entityNames[$tableIndex]);
+
+                $renderedTemplate = $twig->render($this->topRepositoryTemple, array('tableName' => $tableName, 'extendClass' => $extendClass, 'bundleName' => $bundleName, 'entityDql' => $entityDql));
 
                 //parse the columns
                 foreach ($fieldNames[$tableIndex] as $columnName) {

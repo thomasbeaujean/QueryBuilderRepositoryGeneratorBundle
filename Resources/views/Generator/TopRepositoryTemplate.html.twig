@@ -10,10 +10,9 @@ namespace tbn\QueryBuilderRepositoryGeneratorBundle\{{ bundleName }}\Repository;
 
 
 use Doctrine\ORM\Query\Expr\Comparison;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-class {{ tableName }}Repository extends EntityRepository
+class {{ tableName }}Repository extends {{ extendClass }}
 {
     protected static $parameterIndex = 0;
 

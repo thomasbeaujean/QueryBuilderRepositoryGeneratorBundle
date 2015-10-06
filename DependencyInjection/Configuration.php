@@ -58,6 +58,16 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('repositories_extensions')
+                    ->prototype('array')
+                        ->prototype('array')
+                            ->children()
+                                ->scalarNode('extension_class')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

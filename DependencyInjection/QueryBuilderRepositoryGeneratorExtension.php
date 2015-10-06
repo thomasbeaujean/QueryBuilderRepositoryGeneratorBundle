@@ -30,7 +30,14 @@ class QueryBuilderRepositoryGeneratorExtension extends Extension
             $entityConfiguration[] = $entityConfiguration;
         }
 
+        if (isset($config['repositories_extensions'][0])) {
+            $repositoryExtensions = $config['repositories_extensions'][0];
+        } else {
+            $repositoryExtensions = [];
+        }
+
         $container->setParameter('tbn_qbrg.generator.template.entity_configuration', $entityConfiguration);
+        $container->setParameter('tbn_qbrg.generator.template.repository_extension', $repositoryExtensions);
 
         //the templates
         $container->setParameter('tbn_qbrg.generator.template.top_repository', $config['templates']['top_repository']);
