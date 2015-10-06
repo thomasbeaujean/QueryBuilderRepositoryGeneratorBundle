@@ -3,6 +3,5 @@
     "description": "Generate filters for queryBuilder in a repository",
     "autoload": {
         "psr-4": { "tbn\\QueryBuilderRepositoryGeneratorBundle\\": "" }
-    },
-    "target-dir": "tbn/QueryBuilderRepositoryGeneratorBundle"
+    }
 }
