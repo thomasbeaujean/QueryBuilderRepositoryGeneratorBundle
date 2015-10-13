@@ -10,8 +10,8 @@
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
-            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$columnName);
-            $qb->setParameter($columnName, $value);
+            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
+            $qb->setParameter($parameterName, $value);
         }
 
         return $qb;
