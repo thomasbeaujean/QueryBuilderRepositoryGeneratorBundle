@@ -2,7 +2,6 @@
 
 namespace tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\Bundle\DoctrineBundle\Mapping\DisconnectedMetadataFactory;
 use Symfony\Component\Filesystem\Filesystem;
 use tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
@@ -10,8 +9,6 @@ use tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
 /**
  *
  * @author Thomas BEAUJEAN
- *
- * @todo Clean this files, make it more readable
  *
  */
 class RepositoryGenerator
@@ -22,7 +19,6 @@ class RepositoryGenerator
      *
      * @param type         $topRepositoryTemple
      * @param type         $columnTemplate
-     * @param type         $extraColumnTemplate
      * @param type         $bottomRepositoryTemplate
      * @param type         $bundles
      * @param type         $doctrine
@@ -30,8 +26,9 @@ class RepositoryGenerator
      * @param type         $kernel
      * @param type         $twig
      * @param Configurator $configurator
+     * @param string       $associationTemplate
      */
-    public function __construct($topRepositoryTemple, $columnTemplate, $extraColumnTemplate, $bottomRepositoryTemplate, $bundles, $doctrine, $em, $kernel, $twig, Configurator $configurator)
+    public function __construct($topRepositoryTemple, $columnTemplate, $bottomRepositoryTemplate, $bundles, $doctrine, $em, $kernel, $twig, Configurator $configurator, $associationTemplate)
     {
         $this->doctrine = $doctrine;
         $this->em = $em;
@@ -44,8 +41,8 @@ class RepositoryGenerator
         //the templates
         $this->topRepositoryTemple = $topRepositoryTemple;
         $this->columnTemplate = $columnTemplate;
-        $this->extraColumnTemplate = $extraColumnTemplate;
         $this->bottomRepositoryTemplate = $bottomRepositoryTemplate;
+        $this->associationTemplate = $associationTemplate;
 
         $this->configurator = $configurator;
     }
@@ -78,50 +75,130 @@ class RepositoryGenerator
         //parse the bundles
         foreach ($bundles as $bundleName) {
             //the path of the files
-            $path = $directory.'/'.$bundleName.'/Repository';
+            $allMetadata = $this->getAllMetadata(array($bundleName));
+            $metadata = $allMetadata->getMetadata();
 
-            $description = $this->getDatabaseDescription(array($bundleName));
+            foreach ($metadata as $meta) {
+                $entityClasspath = $meta->name;
+                $fieldMappings = $meta->fieldMappings;
+                $associationMappings = $meta->associationMappings;
 
-            $fieldNames = $description['fieldNames'];
-            $tableNames = $description['tableNames'];
-            $entityNames = $description['entityNames'];
+                $pathParts = explode('\\', $entityClasspath);
+                $entityClassname = end($pathParts);
 
-            foreach ($tableNames as $tableIndex => $tableName) {
-                $entityDql = $configurator->getEntityDqlName($entityNames[$tableIndex], $tableName);
+                $entityDql = $configurator->getEntityDqlName($entityClasspath);
 
-                $extendClass = $this->configurator->getExtendRepository($entityNames[$tableIndex]);
-
-                $renderedTemplate = $twig->render($this->topRepositoryTemple, array('tableName' => $tableName, 'extendClass' => $extendClass, 'bundleName' => $bundleName, 'entityDql' => $entityDql));
+                $renderedTemplate = $this->renderTopClass($entityClasspath, $entityClassname, $bundleName, $entityDql);
 
                 //parse the columns
-                foreach ($fieldNames[$tableIndex] as $columnName) {
-                    $parameters = array(
-                        'entity' => $tableName,
-                        'entityDql' => $entityDql,
-                        'column' => ucfirst($columnName),
-                        'columnDql' => $columnName,
-                    );
+                foreach ($fieldMappings as $fieldMapping) {
+                    $renderedTemplate .= $this->renderField($fieldMapping, $entityDql);
+                }
 
-                    $renderedTemplate .= $twig->render($this->columnTemplate, $parameters);
-
-                    //if an extra template has been provided
-                    if ($this->extraColumnTemplate !== '') {
-                        //we render this extra template for the columns
-                        $renderedTemplate .= $twig->render($this->extraColumnTemplate, $parameters);
-                    }
+                foreach ($associationMappings as $associationMapping) {
+                    $renderedTemplate .= $this->renderAssociation($associationMapping, $entityDql);
                 }
 
                 //get the bottom template
                 $renderedTemplate .= $twig->render($this->bottomRepositoryTemplate);
 
-                //create if needed the repertory
-                $this->createRepertory($path);
-
                 //store the generated content
-                $fileName = $path.'/'.$tableName.'Repository.php';
-                $this->putFileContent($fileName, $renderedTemplate);
+                $fullPath = $directory.'/'.$entityClasspath.'Repository.php';
+                $fullPath = str_replace('\\', '/', $fullPath);
+
+                $this->persistClass($fullPath, $renderedTemplate);
             }
         }
+    }
+
+    /**
+     *
+     * @param string $filePath
+     * @param string $content
+     */
+    protected function persistClass($filePath, $content)
+    {
+        $pathParts = explode('/', $filePath);
+        array_pop($pathParts);
+        $directory = implode('/', $pathParts);
+
+        //create if needed the repertory
+        $this->createRepertory($directory);
+        $this->putFileContent($filePath, $content);
+    }
+    /**
+     *
+     * @param string $entityClasspath
+     * @param string $entityClassname
+     * @param string $bundleName
+     * @param string $entityDql
+     * @return type
+     */
+    protected function renderTopClass($entityClasspath, $entityClassname, $bundleName, $entityDql)
+    {
+        //services
+        $twig = $this->twig;
+
+        $extendClass = $this->configurator->getExtendRepository($entityClasspath);
+
+        $entityClasspath = str_replace('\\', '/', $entityClasspath);
+        $pathParts = explode('/', $entityClasspath);
+        array_pop($pathParts);
+        $namespace = implode('\\', $pathParts);
+
+        $topClassparameter = array(
+            'namespace' => $namespace,
+            'entityClassname' => $entityClassname,
+            'extendClass' => $extendClass,
+            'bundleName' => $bundleName,
+            'entityDql' => $entityDql,
+        );
+
+        $renderedTemplate = $twig->render($this->topRepositoryTemple, $topClassparameter);
+
+        return $renderedTemplate;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function renderAssociation($associationMapping, $entityDql)
+    {
+        //services
+        $twig = $this->twig;
+
+        $fieldName = $associationMapping['fieldName'];
+        $parameters = array(
+            'entityDql' => $entityDql,
+            'column' => ucfirst($fieldName),
+            'columnDql' => $fieldName,
+        );
+
+        $renderedTemplate = $twig->render($this->associationTemplate, $parameters);
+
+        return $renderedTemplate;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    protected function renderField($fieldMapping, $entityDql)
+    {
+        //services
+        $twig = $this->twig;
+
+        $fieldName = $fieldMapping['fieldName'];
+        $parameters = array(
+            'entityDql' => $entityDql,
+            'column' => ucfirst($fieldName),
+            'columnDql' => $fieldName,
+        );
+
+        $renderedTemplate = $twig->render($this->columnTemplate, $parameters);
+
+        return $renderedTemplate;
     }
 
     /**
@@ -134,100 +211,6 @@ class RepositoryGenerator
     {
         // Stores the cache
         file_put_contents($fileName, $content);
-    }
-
-    /**
-     * getDatabaseDescription
-     *
-     * @param array         $bundles
-     * @param EntityManager $customEm
-     *
-     * @return array
-     */
-    public function getDatabaseDescription($bundles, EntityManager $customEm = null)
-    {
-        $em = $customEm;
-        if (null === $customEm) {//if the custom em is given, we use it
-            $em = $this->em;
-        }
-
-        $metadata = $this->getAllMetadata($bundles);
-
-        $check = array();
-        $check['tables'] = array();
-        $check['fields'] = array();
-        $check['fieldNames'] = array();
-        $check['tableNames'] = array();
-        $check['entityNames'] = array();
-
-        $ignoreClasses = array();
-
-        //look for subclasses that does not have the correct table Name.
-        foreach ($metadata->getMetadata() as $fieldMapping) {
-            $ignoreClasses = array_merge($ignoreClasses, $fieldMapping->subClasses);
-        }
-
-        //ignore subclasses
-        foreach ($metadata->getMetadata() as $fieldMapping) {
-            if (!in_array($fieldMapping->name, $ignoreClasses)) {
-                $tableName = $this->removeBrackets($fieldMapping->table['name']);
-                $check['tables'][] = $tableName;
-
-                $nameSpaceExploded = explode('\\', $fieldMapping->name);
-                $tableNameSpace = $nameSpaceExploded[count($nameSpaceExploded) - 1];//get the last item
-                $check['tableNames'][$tableName] = $tableNameSpace;
-                $check['entityNames'][$tableName] = $fieldMapping->name;
-
-                $check['fieldNames'][$tableName] = array();
-                foreach ($fieldMapping->fieldNames as $columnName => $fieldName) {
-                    $check['fieldNames'][$tableName][$columnName] = $fieldName;
-                }
-
-                unset($tableName);
-            }
-        }
-
-        foreach ($metadata->getMetadata() as $fieldMapping) {
-            if (!in_array($fieldMapping->name, $ignoreClasses)) {
-                $tableName = $this->removeBrackets($fieldMapping->table['name']);
-                $check['fields'][$tableName] = array();
-
-                //simple fields
-                foreach ($fieldMapping->getColumnNames() as $columnName) {
-                    $check['fields'][$tableName][] = $columnName;
-                }
-
-                //associated mapping
-                foreach ($fieldMapping->associationMappings as $association) {
-                    //if association is on the entity table
-                    if (isset($association['joinColumnFieldNames'])) {
-                        foreach ($association['joinColumnFieldNames'] as $columnName) {
-                            $check['fields'][$tableName][] = $columnName;
-                            $check['fieldNames'][$tableName][$columnName] = $association['fieldName'];
-                        }
-                    }
-                }
-
-                unset($tableName);
-            }
-        }
-
-        return $check;
-    }
-
-    /**
-     * Remove the beginning and ending bracket of the table name
-     * @param string $tableName
-     * @return string
-     */
-    protected function removeBrackets($tableName)
-    {
-        //remove [ ] from the tablename
-        $characters = array('[', ']');
-        $tableName = str_replace($characters, '', $tableName);
-        unset($characters);
-
-        return $tableName;
     }
 
     /**

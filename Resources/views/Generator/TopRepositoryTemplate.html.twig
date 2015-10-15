@@ -5,14 +5,17 @@
  * DO NOT MODIFY IT, CHANGES WOULD BE OVERWRITTEN
  *
  */
-
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\{{ bundleName }}\Repository;
+namespace tbn\QueryBuilderRepositoryGeneratorBundle\{{ namespace }};
 
 
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
-class {{ tableName }}Repository extends {{ extendClass }}
+/**
+ * Generated class for filter query builders
+ *
+ */
+class {{ entityClassname }}Repository extends {{ extendClass }}
 {
     protected static $parameterIndex = 0;
 

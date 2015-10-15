@@ -4,7 +4,6 @@ services:
         arguments:
             - "%tbn_qbrg.generator.template.top_repository%"
             - "%tbn_qbrg.generator.template.column%"
-            - "%tbn_qbrg.generator.template.extra_column%"
             - "%tbn_qbrg.generator.template.bottom_repository%"
             - "%tbn_qbrg.generator.bundles%"
             - "@doctrine"
@@ -12,6 +11,7 @@ services:
             - "@kernel"
             - "@twig"
             - "@tbn_qbrg.configuration.configurator"
+            - "%tbn_qbrg.generator.template.association%"
     tbn_qbrg.configuration.configurator:
         class: tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator
         arguments:

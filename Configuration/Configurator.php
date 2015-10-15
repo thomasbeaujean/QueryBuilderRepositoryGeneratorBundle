@@ -26,16 +26,18 @@ class Configurator
     /**
      *
      * @param string $entityName
-     * @param string $tableName
      *
      * @return string The
      */
-    public function getEntityDqlName($entityName, $tableName)
+    public function getEntityDqlName($entityName)
     {
         if (isset($this->entityConfigurations[$entityName])) {
             $entityDqlName = $this->entityConfigurations[$entityName]['querybuilder_name'];
         } else {
-            $entityDqlName = lcfirst($tableName);
+            $pathParts = explode('\\', $entityName);
+            $entityClassname = end($pathParts);
+
+            $entityDqlName = lcfirst($entityClassname);
         }
 
         return $entityDqlName;

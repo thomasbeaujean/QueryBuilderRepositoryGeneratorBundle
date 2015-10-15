@@ -1,0 +1,65 @@
+
+    public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    {
+        //get a uniq index
+        $index = self::getParameterIndex();
+        $parameterName = $columnName.$index;
+
+        unset($index);
+
+        if ($value === null) {
+            $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+        } else {
+            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
+            $qb->setParameter($parameterName, $value->getId());
+        }
+
+        return $qb;
+    }
+
+    public static function filterIn{{ column }}(QueryBuilder $qb, $values, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    {
+        //get a uniq index
+        $index = self::getParameterIndex();
+        $parameterName = $columnName.$index;
+
+        unset($index);
+
+        if ($values === null) {
+            $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+        } else {
+            $ids = array();
+
+            foreach ($values as $value) {
+                $ids[] = $value->getId();
+            }
+
+            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$parameterName.')');
+            $qb->setParameter($parameterName, $ids);
+        }
+
+        return $qb;
+    }
+
+    public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    {
+        //get a uniq index
+        $index = self::getParameterIndex();
+        $parameterName = $columnName.$index;
+
+        unset($index);
+
+        if ($values === null) {
+            $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
+        } else {
+            $ids = array();
+
+            foreach ($values as $value) {
+                $ids[] = $value->getId();
+            }
+            $qb->andWhere($entityName.'.'.$columnName.' NOT IN (:'.$parameterName.')');
+            $qb->setParameter($parameterName, $ids);
+        }
+
+        return $qb;
+    }

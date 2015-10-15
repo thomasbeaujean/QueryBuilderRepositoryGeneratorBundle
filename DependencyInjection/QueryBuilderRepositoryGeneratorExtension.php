@@ -42,7 +42,7 @@ class QueryBuilderRepositoryGeneratorExtension extends Extension
         //the templates
         $container->setParameter('tbn_qbrg.generator.template.top_repository', $config['templates']['top_repository']);
         $container->setParameter('tbn_qbrg.generator.template.column', $config['templates']['column']);
-        $container->setParameter('tbn_qbrg.generator.template.extra_column', $config['templates']['extra_column']);
+        $container->setParameter('tbn_qbrg.generator.template.association', $config['templates']['association']);
         $container->setParameter('tbn_qbrg.generator.template.bottom_repository', $config['templates']['bottom_repository']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
