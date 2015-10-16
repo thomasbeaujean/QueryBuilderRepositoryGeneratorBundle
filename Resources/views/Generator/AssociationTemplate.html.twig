@@ -29,12 +29,18 @@
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
             $ids = array();
+            //the array might contains a null value
+            $orNull = '';
 
             foreach ($values as $value) {
-                $ids[] = $value->getId();
+                if ($value !== null) {
+                    $ids[] = $value->getId();
+                } else {
+                    $orNull = ' OR '.$entityName.'.'.$columnName.' IS NULL';
+                }
             }
 
-            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$parameterName.')');
+            $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$parameterName.')'.$orNull);
             $qb->setParameter($parameterName, $ids);
         }
 
