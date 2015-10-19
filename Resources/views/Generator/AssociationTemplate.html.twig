@@ -47,7 +47,7 @@
         return $qb;
     }
 
-    public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    public static function filterNotIn{{ column }}(QueryBuilder $qb, $values, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
         //get a uniq index
         $index = self::getParameterIndex();
