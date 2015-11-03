@@ -26,8 +26,10 @@ class QueryBuilderRepositoryGeneratorExtension extends Extension
         $container->setParameter('tbn_qbrg.generator.bundles', $config['bundles']);
 
         $entityConfiguration = [];
-        foreach ($config['mapping'] as $entityConfiguration) {
-            $entityConfiguration[] = $entityConfiguration;
+        foreach ($config['mapping'] as $entityConfig) {
+            foreach ($entityConfig as $entityAlias => $configuration) {
+                $entityConfiguration[$entityAlias] = $configuration;
+            }
         }
 
         if (isset($config['repositories_extensions'][0])) {
