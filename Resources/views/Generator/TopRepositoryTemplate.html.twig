@@ -7,7 +7,7 @@
  */
 namespace tbn\QueryBuilderRepositoryGeneratorBundle\{{ namespace }};
 
-
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 
@@ -91,6 +91,19 @@ class {{ entityClassname }}Repository extends {{ extendClass }}
     {
          $query = $qb->getQuery();
          $results = $query->getArrayResult();
+
+         return $results;
+    }
+
+    /**
+     * Get the getSingleArrayResult of the query builder
+     *
+     * @return unknown The results
+     */
+    public static function getQueryBuilderSingleArrayResult(QueryBuilder $qb)
+    {
+         $query = $qb->getQuery();
+         $results = $query->getSingleResult(Query::HYDRATE_ARRAY);
 
          return $results;
     }
