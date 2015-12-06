@@ -22,7 +22,7 @@ class RepositoryGeneratorWarmer implements CacheWarmerInterface
     }
 
     /**
-     * Warms up the Rcache.
+     * Warms up the cache.
      *
      * @param string $cacheDir The cache directory
      */

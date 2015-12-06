@@ -54,7 +54,7 @@ class Configurator
         if (isset($this->repositoryExtensions[$entityName])) {
             $extendRepository = $this->repositoryExtensions[$entityName]['extension_class'];
         } else {
-            $extendRepository = self::DEFAULT_REPOSITORY_EXTEND;
+            $extendRepository = static::DEFAULT_REPOSITORY_EXTEND;
         }
 
         return $extendRepository;

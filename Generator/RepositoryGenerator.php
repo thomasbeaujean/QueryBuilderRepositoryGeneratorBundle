@@ -48,17 +48,6 @@ class RepositoryGenerator
     }
 
     /**
-     * Create the path
-     *
-     * @param string $path
-     */
-    protected function createRepertory($path)
-    {
-        $fs = new Filesystem();
-        $fs->mkdir($path);
-    }
-
-    /**
      * Generate all files
      *
      * @param string $directory
@@ -112,6 +101,17 @@ class RepositoryGenerator
     }
 
     /**
+     * Create the path
+     *
+     * @param string $path
+     */
+    protected function createRepertory($path)
+    {
+        $fs = new Filesystem();
+        $fs->mkdir($path);
+    }
+
+    /**
      *
      * @param string $filePath
      * @param string $content
@@ -154,9 +154,7 @@ class RepositoryGenerator
             'entityDql' => $entityDql,
         );
 
-        $renderedTemplate = $twig->render($this->topRepositoryTemple, $topClassparameter);
-
-        return $renderedTemplate;
+        return $twig->render($this->topRepositoryTemple, $topClassparameter);
     }
 
     /**
@@ -175,9 +173,7 @@ class RepositoryGenerator
             'columnDql' => $fieldName,
         );
 
-        $renderedTemplate = $twig->render($this->associationTemplate, $parameters);
-
-        return $renderedTemplate;
+        return $twig->render($this->associationTemplate, $parameters);
     }
 
     /**
@@ -196,9 +192,7 @@ class RepositoryGenerator
             'columnDql' => $fieldName,
         );
 
-        $renderedTemplate = $twig->render($this->columnTemplate, $parameters);
-
-        return $renderedTemplate;
+        return $twig->render($this->columnTemplate, $parameters);
     }
 
     /**
@@ -239,8 +233,6 @@ class RepositoryGenerator
 
         $bundle = $this->kernel->getBundle($bundleName);
 
-        $metadata = $manager->getBundleMetadata($bundle);
-
-        return $metadata;
+        return $manager->getBundleMetadata($bundle);
     }
 }
