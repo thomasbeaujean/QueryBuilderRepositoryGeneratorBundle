@@ -3,9 +3,7 @@
 namespace tbn\QueryBuilderRepositoryGeneratorBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use tbn\QueryBuilderRepositoryGeneratorBundle\ClassLoader\GeneratedFilesLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
  *
@@ -15,17 +13,11 @@ use Symfony\Component\DependencyInjection\Container;
 class QueryBuilderRepositoryGeneratorBundle extends Bundle
 {
     /**
-     * @var boolean
-     */
-    private $classLoaderInitialized = false;
-
-    /**
      * (non-PHPdoc)
      * @see \Symfony\Component\HttpKernel\Bundle\Bundle::boot()
      */
     public function boot()
     {
-        $this->initAdmingeneratorClassLoader($this->container);
     }
 
     /**
@@ -36,22 +28,6 @@ class QueryBuilderRepositoryGeneratorBundle extends Bundle
      */
     public function build(ContainerBuilder $container)
     {
-        $this->initAdmingeneratorClassLoader($container);
         parent::build($container);
-    }
-
-    /**
-     * Initialize Class loader
-     *
-     * @param ContainerBuilder $container
-     */
-    private function initAdmingeneratorClassLoader(Container $container)
-    {
-        if (!$this->classLoaderInitialized) {
-            $this->classLoaderInitialized = true;
-            $admingeneratedClassLoader = new GeneratedFilesLoader();
-            $admingeneratedClassLoader->setBasePath($container->getParameter('kernel.cache_dir'));
-            $admingeneratedClassLoader->register();
-        }
     }
 }

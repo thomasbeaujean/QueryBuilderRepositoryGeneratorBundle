@@ -28,10 +28,8 @@ class RepositoryGeneratorWarmer implements CacheWarmerInterface
      */
     public function warmUp($cacheDir)
     {
-        $directory = '/tbn/QueryBuilderRepositoryGeneratorBundle';
-
         //generate files
-        $this->repositoryGenerator->generateFiles($cacheDir.$directory);
+        $this->repositoryGenerator->generateFiles();
     }
 
     /**

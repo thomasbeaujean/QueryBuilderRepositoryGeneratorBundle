@@ -50,9 +50,8 @@ class RepositoryGenerator
     /**
      * Generate all files
      *
-     * @param string $directory
      */
-    public function generateFiles($directory)
+    public function generateFiles()
     {
         //the bundles to scan
         $bundles = $this->bundles;
@@ -71,13 +70,15 @@ class RepositoryGenerator
                 $entityClasspath = $meta->name;
                 $fieldMappings = $meta->fieldMappings;
                 $associationMappings = $meta->associationMappings;
+                $customRepositoryClassName = $meta->customRepositoryClassName;
 
-                $pathParts = explode('\\', $entityClasspath);
+                $pathParts = explode('\\', $customRepositoryClassName);
                 $entityClassname = end($pathParts);
 
-                $entityDql = $configurator->getEntityDqlName($entityClasspath);
+                $entityDql = $configurator->getEntityDqlName($meta->name);
 
-                $renderedTemplate = $this->renderTopClass($entityClasspath, $entityClassname, $bundleName, $entityDql);
+                $entityNamespace = $this->getNamespaceFromFilepath($customRepositoryClassName);
+                $renderedTemplate = $this->renderTopClass($entityNamespace, $entityClasspath, $entityClassname, $bundleName, $entityDql);
 
                 //parse the columns
                 foreach ($fieldMappings as $fieldMapping) {
@@ -92,10 +93,12 @@ class RepositoryGenerator
                 $renderedTemplate .= $twig->render($this->bottomRepositoryTemplate);
 
                 //store the generated content
-                $fullPath = $directory.'/'.$entityClasspath.'Repository.php';
+                $fullPath = $allMetadata->getPath().'/'.$customRepositoryClassName.'Base.php';
                 $fullPath = str_replace('\\', '/', $fullPath);
 
-                $this->persistClass($fullPath, $renderedTemplate);
+                if (!empty($customRepositoryClassName)) {
+                    $this->persistClass($fullPath, $renderedTemplate);
+                }
             }
         }
     }
@@ -118,33 +121,54 @@ class RepositoryGenerator
      */
     protected function persistClass($filePath, $content)
     {
-        $pathParts = explode('/', $filePath);
-        array_pop($pathParts);
-        $directory = implode('/', $pathParts);
+        $directory = $this->getDirectoryFromFilepath($filePath);
 
         //create if needed the repertory
         $this->createRepertory($directory);
         $this->putFileContent($filePath, $content);
     }
+
     /**
      *
+     * @param string $filePath
+     * @return string the directory path
+     */
+    protected function getDirectoryFromFilepath($filePath)
+    {
+        $pathParts = explode('/', $filePath);
+        array_pop($pathParts);
+
+        return implode('/', $pathParts);
+    }
+
+    /**
+     *
+     * @param string $filePath
+     * @return string the namespace
+     */
+    protected function getNamespaceFromFilepath($filePath)
+    {
+        $pathParts = explode('\\', $filePath);
+        array_pop($pathParts);
+
+        return implode('\\', $pathParts);
+    }
+
+    /**
+     *
+     * @param string $namespace
      * @param string $entityClasspath
      * @param string $entityClassname
      * @param string $bundleName
      * @param string $entityDql
      * @return type
      */
-    protected function renderTopClass($entityClasspath, $entityClassname, $bundleName, $entityDql)
+    protected function renderTopClass($namespace, $entityClasspath, $entityClassname, $bundleName, $entityDql)
     {
         //services
         $twig = $this->twig;
 
         $extendClass = $this->configurator->getExtendRepository($entityClasspath);
-
-        $entityClasspath = str_replace('\\', '/', $entityClasspath);
-        $pathParts = explode('/', $entityClasspath);
-        array_pop($pathParts);
-        $namespace = implode('\\', $pathParts);
 
         $topClassparameter = array(
             'namespace' => $namespace,

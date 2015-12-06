@@ -20,7 +20,7 @@ Add the bundles you want:
 		query_builder_repository_generator:
     		bundles:
         		- "<<YourBundleName>>"
-Those bundles will have the repository generated in the cache directory, in the tbn folder. Check the content by yourself.
+Those bundles will have the repositories generated in the Repository directory of the bundles. Check the content by yourself.
 
 ## Optional configuration
 
@@ -40,7 +40,7 @@ You can specify a class to extends for each entity.
 
 
 		repositories_extensions:
-			- "Specitive\FrontBundle\Entity\Item": #the entity class
+			- "AcmeBundle\Entity\Item": #the entity class
 				extension_class: "\\Gedmo\\Tree\\Entity\\Repository\\MaterializedPathRepository" #the class to extends
 
 The templates used by the generator can be set with these configurations.
@@ -59,14 +59,11 @@ The extra_column template have the following variables:
 
 # Use generated repositories
 
-In your Entity Repository, use the generated repository instead of the classic EntityRepository:
+In your Entity Repository, extends the generated repository.
 
-Remove the use EntityRepository and use this "use":
-
-		use tbn\QueryBuilderRepositoryGeneratorBundle\<<YourBundleName>>\Repository\<<Your Entity Name>>Repository as EntityRepository;
+		class UserRepository extends UserRepositoryBase
 
 Your repository has now some predefined function like "filterById", "filterInId" for all the columns.
-
 
 # Create queries
 

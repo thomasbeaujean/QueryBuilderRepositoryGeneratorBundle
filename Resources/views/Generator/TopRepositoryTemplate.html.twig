@@ -5,7 +5,7 @@
  * DO NOT MODIFY IT, CHANGES WOULD BE OVERWRITTEN
  *
  */
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\{{ namespace }};
+namespace {{ namespace }};
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Comparison;
@@ -15,7 +15,7 @@ use Doctrine\ORM\QueryBuilder;
  * Generated class for filter query builders
  *
  */
-class {{ entityClassname }}Repository extends {{ extendClass }}
+class {{ entityClassname }}Base extends {{ extendClass }}
 {
     protected static $parameterIndex = 0;
 
@@ -26,9 +26,7 @@ class {{ entityClassname }}Repository extends {{ extendClass }}
      */
     public static function getParameterIndex()
     {
-        self::$parameterIndex++;
-
-        return self::$parameterIndex;
+        return static::$parameterIndex++;
     }
 
     /**
@@ -38,100 +36,98 @@ class {{ entityClassname }}Repository extends {{ extendClass }}
      */
     public function getNewQueryBuilder()
     {
-        $qb = $this->createQueryBuilder('{{ entityDql }}');
-
-        return $qb;
+        return $this->createQueryBuilder('{{ entityDql }}');
     }
 
     /**
      * Get the result of the query builder
      *
-     * @return unknown The results
+     * @param QueryBuilder $qb
+     * @return ArrayCollection The results
      */
     public static function getQueryBuilderResult(QueryBuilder $qb)
     {
-         $query = $qb->getQuery();
-         $results = $query->getResult();
+        $query = $qb->getQuery();
 
-         return $results;
+        return $query->getResult();
     }
 
     /**
      * Get the SingleResult of the query builder
      *
-     * @return unknown The results
+     * @param QueryBuilder $qb
+     * @return Object The results
      */
     public static function getQueryBuilderSingleResult(QueryBuilder $qb)
     {
-         $query = $qb->getQuery();
-         $results = $query->getSingleResult();
+        $query = $qb->getQuery();
 
-         return $results;
+        return $query->getSingleResult();
     }
 
     /**
      * Get the OneOrNullResult of the query builder
      *
-     * @return unknown The results
+     * @param QueryBuilder $qb
+     * @return Object The entity
      */
     public static function getQueryBuilderOneOrNullResult(QueryBuilder $qb)
     {
-         $query = $qb->getQuery();
-         $results = $query->getOneOrNullResult();
+        $query = $qb->getQuery();
 
-         return $results;
+        return $query->getOneOrNullResult();
     }
 
     /**
      * Get the getArrayResult of the query builder
      *
-     * @return unknown The results
+     * @param QueryBuilder $qb
+     * @return array The results
      */
     public static function getQueryBuilderArrayResult(QueryBuilder $qb)
     {
-         $query = $qb->getQuery();
-         $results = $query->getArrayResult();
+        $query = $qb->getQuery();
 
-         return $results;
+        return $query->getArrayResult();
     }
 
     /**
      * Get the getSingleArrayResult of the query builder
      *
-     * @return unknown The results
+     * @param QueryBuilder $qb
+     * @return array The results
      */
     public static function getQueryBuilderSingleArrayResult(QueryBuilder $qb)
     {
-         $query = $qb->getQuery();
-         $results = $query->getSingleResult(Query::HYDRATE_ARRAY);
+        $query = $qb->getQuery();
 
-         return $results;
+        return $query->getSingleResult(Query::HYDRATE_ARRAY);
     }
 
     /**
      * Get the ScalarResult of the query builder
      *
-     * @return unknown The results
+     * @param QueryBuilder $qb
+     * @return Object The results
      */
     public static function getQueryBuilderScalarResult(QueryBuilder $qb)
     {
-         $query = $qb->getQuery();
-         $results = $query->getScalarResult();
+        $query = $qb->getQuery();
 
-         return $results;
+        return $query->getScalarResult();
     }
 
     /**
      * Get the SingleScalarResult of the query builder
      *
-     * @return unknown The results
+     * @param QueryBuilder $qb
+     * @return Object The results
      */
     public static function getQueryBuilderSingleScalarResult(QueryBuilder $qb)
     {
-         $query = $qb->getQuery();
-         $results = $query->getSingleScalarResult();
+        $query = $qb->getQuery();
 
-         return $results;
+        return $query->getSingleScalarResult();
     }
 
     /**
@@ -151,9 +147,9 @@ class {{ entityClassname }}Repository extends {{ extendClass }}
 
         $qb = $this->getNewQueryBuilder();
         $entityId = $entity->getId();
-        self::filterById($qb, $entityId);
+        static::filterById($qb, $entityId);
 
-        $result = self::getQueryBuilderOneOrNullResult($qb);
+        $result = static::getQueryBuilderOneOrNullResult($qb);
 
         if (null !==  $result) {
             //the entity was found

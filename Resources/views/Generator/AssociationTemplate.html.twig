@@ -1,8 +1,17 @@
 
+    /**
+     *
+     * @param QueryBuilder $qb
+     * @param unknown      $value
+     * @param string       $operator
+     * @param string       $entityName
+     * @param string       $columnName
+     * @return QueryBuilder
+     */
     public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
         //get a uniq index
-        $index = self::getParameterIndex();
+        $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
 
         unset($index);
@@ -17,10 +26,18 @@
         return $qb;
     }
 
+    /**
+     *
+     * @param QueryBuilder $qb
+     * @param unknown      $values
+     * @param string       $entityName
+     * @param string       $columnName
+     * @return QueryBuilder
+     */
     public static function filterIn{{ column }}(QueryBuilder $qb, $values, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
         //get a uniq index
-        $index = self::getParameterIndex();
+        $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
 
         unset($index);
@@ -47,10 +64,18 @@
         return $qb;
     }
 
+    /**
+     *
+     * @param QueryBuilder $qb
+     * @param unknown      $values
+     * @param string       $entityName
+     * @param string       $columnName
+     * @return QueryBuilder
+     */
     public static function filterNotIn{{ column }}(QueryBuilder $qb, $values, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
         //get a uniq index
-        $index = self::getParameterIndex();
+        $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
 
         unset($index);
