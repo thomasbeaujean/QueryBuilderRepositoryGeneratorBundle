@@ -2,7 +2,7 @@
     public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
         //get a uniq index
-        $index = self::getParameterIndex();
+        $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
 
         unset($index);
@@ -20,7 +20,7 @@
     public static function filterIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
         //get a uniq index
-        $index = self::getParameterIndex();
+        $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
 
         unset($index);
@@ -38,7 +38,7 @@
     public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
         //get a uniq index
-        $index = self::getParameterIndex();
+        $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
 
         unset($index);

@@ -26,9 +26,9 @@ class {{ entityClassname }}Repository extends {{ extendClass }}
      */
     public static function getParameterIndex()
     {
-        self::$parameterIndex++;
+        static::$parameterIndex++;
 
-        return self::$parameterIndex;
+        return static::$parameterIndex;
     }
 
     /**
@@ -151,9 +151,9 @@ class {{ entityClassname }}Repository extends {{ extendClass }}
 
         $qb = $this->getNewQueryBuilder();
         $entityId = $entity->getId();
-        self::filterById($qb, $entityId);
+        static::filterById($qb, $entityId);
 
-        $result = self::getQueryBuilderOneOrNullResult($qb);
+        $result = static::getQueryBuilderOneOrNullResult($qb);
 
         if (null !==  $result) {
             //the entity was found
