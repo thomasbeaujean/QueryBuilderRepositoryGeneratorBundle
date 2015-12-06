@@ -50,9 +50,8 @@ class RepositoryGenerator
     /**
      * Generate all files
      *
-     * @param string $directory
      */
-    public function generateFiles($directory)
+    public function generateFiles()
     {
         //the bundles to scan
         $bundles = $this->bundles;
@@ -66,6 +65,9 @@ class RepositoryGenerator
             //the path of the files
             $allMetadata = $this->getAllMetadata(array($bundleName));
             $metadata = $allMetadata->getMetadata();
+
+            //store the generated files in the base repertory
+            $directory = $allMetadata->getPath().'/'.$bundleName.'/Repository/Base';
 
             foreach ($metadata as $meta) {
                 $entityClasspath = $meta->name;
@@ -94,6 +96,8 @@ class RepositoryGenerator
                 //store the generated content
                 $fullPath = $directory.'/'.$entityClasspath.'Repository.php';
                 $fullPath = str_replace('\\', '/', $fullPath);
+                //remove the AcmeBundle/Entity from the Base/AcmeBundle/Entity
+                $fullPath = str_replace($bundleName.'/Repository/Base/'.$bundleName.'/Entity', $bundleName.'/Repository/Base', $fullPath);
 
                 $this->persistClass($fullPath, $renderedTemplate);
             }
