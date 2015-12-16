@@ -7,9 +7,7 @@ services:
             - "%tbn_qbrg.generator.template.bottom_repository%"
             - "%tbn_qbrg.generator.bundles%"
             - "@doctrine"
-            - "@doctrine.orm.entity_manager"
             - "@kernel"
-            - "@twig"
             - "@tbn_qbrg.configuration.configurator"
             - "%tbn_qbrg.generator.template.association%"
     tbn_qbrg.configuration.configurator:

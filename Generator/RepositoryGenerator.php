@@ -22,19 +22,14 @@ class RepositoryGenerator
      * @param type         $bottomRepositoryTemplate
      * @param type         $bundles
      * @param type         $doctrine
-     * @param type         $em
      * @param type         $kernel
-     * @param type         $twig
      * @param Configurator $configurator
      * @param string       $associationTemplate
      */
-    public function __construct($topRepositoryTemple, $columnTemplate, $bottomRepositoryTemplate, $bundles, $doctrine, $em, $kernel, $twig, Configurator $configurator, $associationTemplate)
+    public function __construct($topRepositoryTemple, $columnTemplate, $bottomRepositoryTemplate, $bundles, $doctrine, $kernel, Configurator $configurator, $associationTemplate)
     {
         $this->doctrine = $doctrine;
-        $this->em = $em;
         $this->kernel = $kernel;
-        $this->twig = $twig;
-
         //the bundles to scan
         $this->bundles = $bundles;
 
@@ -53,6 +48,7 @@ class RepositoryGenerator
      */
     public function generateFiles()
     {
+        $this->twig = $this->kernel->getContainer()->get('twig');
         //the bundles to scan
         $bundles = $this->bundles;
         $configurator = $this->configurator;
