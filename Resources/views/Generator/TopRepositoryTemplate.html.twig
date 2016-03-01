@@ -26,7 +26,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
      */
     public static function getParameterIndex()
     {
-        return static::$parameterIndex++;
+        return '{{ entityDql }}'.static::$parameterIndex++;
     }
 
     /**
