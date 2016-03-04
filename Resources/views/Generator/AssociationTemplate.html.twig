@@ -17,7 +17,11 @@
         unset($index);
 
         if ($value === null) {
-            $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+            if (Comparison::NEQ === $operator) {
+                $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
+            } else {
+                $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+            }
         } else {
             $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
             $qb->setParameter($parameterName, $value->getId());
