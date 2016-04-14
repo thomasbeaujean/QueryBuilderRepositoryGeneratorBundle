@@ -167,7 +167,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
     public function exists($entity)
     {
         if (null === $entity) {
-            throw new \Exception('The entity parameter must be provided, it can not be null');
+            throw new \LogicException('The entity parameter must be provided, it can not be null');
         }
 
         $exists = false;
