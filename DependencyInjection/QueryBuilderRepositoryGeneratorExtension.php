@@ -32,10 +32,15 @@ class QueryBuilderRepositoryGeneratorExtension extends Extension
             }
         }
 
-        if (isset($config['repositories_extensions'][0])) {
-            $repositoryExtensions = $config['repositories_extensions'][0];
-        } else {
-            $repositoryExtensions = [];
+        $repositoryExtensions = [];
+
+        if (isset($config['repositories_extensions'])) {
+            foreach ($config['repositories_extensions'] as $extension) {
+                $keys = array_keys($extension);
+                $entityClass = $keys[0];
+                $extends = $extension[$entityClass];
+                $repositoryExtensions[$entityClass] = $extends;
+            }
         }
 
         $container->setParameter('tbn_qbrg.generator.template.entity_configuration', $entityConfiguration);
