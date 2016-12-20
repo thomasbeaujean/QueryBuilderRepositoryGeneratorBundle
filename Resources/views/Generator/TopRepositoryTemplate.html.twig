@@ -198,3 +198,23 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $qb;
     }
 
+    /**
+     * @param QueryBuilder $qb
+     * @param string       $columnName     default 'id'
+     * @param boolean      $useQueryCache  default false
+     * @param boolean      $useResultCache default false
+     * @return boolean
+     */
+    public static function existsByQueryBuilder(QueryBuilder $qb, $columnName = 'id', $useQueryCache = false, $useResultCache = false)
+    {
+        $exists = false;
+        $qb->select($qb->expr()->count('{{ entityDql }}.'.$columnName));
+
+        $count = static::getQueryBuilderSingleScalarResult($qb, $useQueryCache, $useResultCache);
+
+        if ($count > 0) {
+            $exists = true;
+        }
+
+        return $exists;
+    }
