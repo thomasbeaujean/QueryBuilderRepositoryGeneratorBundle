@@ -83,4 +83,6 @@ Your repository has now some predefined function like "filterById", "filterInId"
 
 # Regenerate files
 
-The files are regenerated during a clear-cache
+Run the command:
+
+    php app/console qbrg:generate
