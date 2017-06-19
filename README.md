@@ -8,9 +8,12 @@ See the create queries section for an example.
 # Installation
 
 ## Import the bundle using composer
-    "tbn/query-builder-repository-generator-bundle"
+    composer require --dev "tbn/query-builder-repository-generator-bundle"
+    
 ## Import the bundle in your AppKernel
-    new tbn\QueryBuilderRepositoryGeneratorBundle\QueryBuilderRepositoryGeneratorBundle(),
+    if ('dev' === $this->getEnvironment()) {
+        $bundles[] = new tbn\QueryBuilderRepositoryGeneratorBundle\QueryBuilderRepositoryGeneratorBundle();
+    }
 
 # Configuration
 
