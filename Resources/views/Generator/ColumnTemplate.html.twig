@@ -10,12 +10,6 @@
      */
     public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
-        //get a uniq index
-        $index = static::getParameterIndex();
-        $parameterName = $columnName.$index;
-
-        unset($index);
-
         if ($value === null) {
             if (Comparison::NEQ === $operator) {
                 $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -23,6 +17,10 @@
                 $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
             }
         } else {
+            //get a uniq index
+            $index = static::getParameterIndex();
+            $parameterName = $columnName.$index;
+
             $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
             $qb->setParameter($parameterName, $value);
         }
@@ -40,15 +38,12 @@
      */
     public static function filterIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
-        //get a uniq index
-        $index = static::getParameterIndex();
-        $parameterName = $columnName.$index;
-
-        unset($index);
-
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
+            //get a uniq index
+            $index = static::getParameterIndex();
+            $parameterName = $columnName.$index;
             $qb->andWhere($entityName.'.'.$columnName.' IN (:'.$parameterName.')');
             $qb->setParameter($parameterName, $value);
         }
@@ -66,15 +61,13 @@
      */
     public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
     {
-        //get a uniq index
-        $index = static::getParameterIndex();
-        $parameterName = $columnName.$index;
-
-        unset($index);
-
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
         } else {
+            //get a uniq index
+            $index = static::getParameterIndex();
+            $parameterName = $columnName.$index;
+
             $qb->andWhere($entityName.'.'.$columnName.' NOT IN (:'.$parameterName.')');
             $qb->setParameter($parameterName, $value);
         }
