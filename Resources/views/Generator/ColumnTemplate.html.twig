@@ -1,14 +1,5 @@
 
-    /**
-     *
-     * @param QueryBuilder $qb
-     * @param unknown      $value
-     * @param string       $operator
-     * @param string       $entityName
-     * @param string       $columnName
-     * @return QueryBuilder
-     */
-    public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}'): QueryBuilder
     {
         if ($value === null) {
             if (Comparison::NEQ === $operator) {
@@ -28,15 +19,7 @@
         return $qb;
     }
 
-    /**
-     *
-     * @param QueryBuilder $qb
-     * @param unknown      $value
-     * @param string       $entityName
-     * @param string       $columnName
-     * @return QueryBuilder
-     */
-    public static function filterIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    public static function filterIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}'): QueryBuilder
     {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
@@ -51,15 +34,7 @@
         return $qb;
     }
 
-    /**
-     *
-     * @param QueryBuilder $qb
-     * @param unknown      $value
-     * @param string       $entityName
-     * @param string       $columnName
-     * @return QueryBuilder
-     */
-    public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}')
+    public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}'): QueryBuilder
     {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');

@@ -6,7 +6,7 @@ services:
             - "%tbn_qbrg.generator.template.column%"
             - "%tbn_qbrg.generator.template.bottom_repository%"
             - "%tbn_qbrg.generator.bundles%"
-            - "@doctrine"
+            - "@maker.doctrine_helper"
             - "@kernel"
             - "@tbn_qbrg.configuration.configurator"
             - "%tbn_qbrg.generator.template.association%"

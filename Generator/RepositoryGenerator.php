@@ -3,32 +3,25 @@
 namespace tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
 use Doctrine\Bundle\DoctrineBundle\Mapping\DisconnectedMetadataFactory;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
+use Twig\Environment;
 
-/**
- *
- * @author Thomas BEAUJEAN
- *
- */
 class RepositoryGenerator
 {
     protected $configurator = null;
+    private $doctrineHelper;
 
     /**
-     *
-     * @param type         $topRepositoryTemple
-     * @param type         $columnTemplate
-     * @param type         $bottomRepositoryTemplate
-     * @param type         $bundles
-     * @param type         $doctrine
-     * @param type         $kernel
-     * @param Configurator $configurator
-     * @param string       $associationTemplate
+     * @var Environment
      */
-    public function __construct($topRepositoryTemple, $columnTemplate, $bottomRepositoryTemplate, $bundles, $doctrine, $kernel, Configurator $configurator, $associationTemplate)
+    private  $twig;
+
+    public function __construct($topRepositoryTemple, $columnTemplate, $bottomRepositoryTemplate, $bundles, DoctrineHelper $doctrineHelper, $kernel, Configurator $configurator, $associationTemplate)
     {
-        $this->doctrine = $doctrine;
+        $this->doctrineHelper = $doctrineHelper;
         $this->kernel = $kernel;
         //the bundles to scan
         $this->bundles = $bundles;
@@ -49,6 +42,7 @@ class RepositoryGenerator
     public function generateFiles()
     {
         $this->twig = $this->kernel->getContainer()->get('twig');
+
         //the bundles to scan
         $bundles = $this->bundles;
         $configurator = $this->configurator;
@@ -59,62 +53,56 @@ class RepositoryGenerator
         //parse the bundles
         foreach ($bundles as $bundleName) {
             //the path of the files
-            $allMetadata = $this->getAllMetadata(array($bundleName));
-            $metadata = $allMetadata->getMetadata();
+            $allMetadata = $this->doctrineHelper->getMetadata($bundleName);
 
-            foreach ($metadata as $meta) {
-                $entityClasspath = $meta->name;
-                $fieldMappings = $meta->fieldMappings;
-                $associationMappings = $meta->associationMappings;
+            /** @var ClassMetadata $meta */
+            foreach ($allMetadata as $meta) {
                 $customRepositoryClassName = $meta->customRepositoryClassName;
+                if ($customRepositoryClassName) {
+                    $entityClasspath = $meta->name;
+                    $fieldMappings = $meta->fieldMappings;
+                    $associationMappings = $meta->associationMappings;
+                    $customRepositoryClassName = $meta->customRepositoryClassName;
 
-                $pathParts = explode('\\', $customRepositoryClassName);
-                $entityClassname = end($pathParts);
+                    $pathParts = explode('\\', $customRepositoryClassName);
+                    $entityClassname = end($pathParts);
 
-                $entityDql = $configurator->getEntityDqlName($meta->name);
+                    $entityDql = $configurator->getEntityDqlName($meta->name);
 
-                $entityNamespace = $this->getNamespaceFromFilepath($customRepositoryClassName);
-                $renderedTemplate = $this->renderTopClass($entityNamespace, $entityClasspath, $entityClassname, $bundleName, $entityDql);
+                    $entityNamespace = $this->getNamespaceFromFilepath($customRepositoryClassName);
+                    $renderedTemplate = $this->renderTopClass($entityNamespace, $entityClasspath, $entityClassname, $bundleName, $entityDql);
 
-                //parse the columns
-                foreach ($fieldMappings as $fieldMapping) {
-                    $renderedTemplate .= $this->renderField($fieldMapping, $entityDql);
-                }
+                    //parse the columns
+                    foreach ($fieldMappings as $fieldMapping) {
+                        $renderedTemplate .= $this->renderField($fieldMapping, $entityDql);
+                    }
 
-                foreach ($associationMappings as $associationMapping) {
-                    $renderedTemplate .= $this->renderAssociation($associationMapping, $entityDql);
-                }
+                    foreach ($associationMappings as $associationMapping) {
+                        $renderedTemplate .= $this->renderAssociation($associationMapping, $entityDql);
+                    }
 
-                //get the bottom template
-                $renderedTemplate .= $twig->render($this->bottomRepositoryTemplate);
+                    //get the bottom template
+                    $renderedTemplate .= $twig->render($this->bottomRepositoryTemplate);
 
-                //store the generated content
-                $fullPath = $allMetadata->getPath().'/'.$customRepositoryClassName.'Base.php';
-                $fullPath = str_replace('\\', '/', $fullPath);
+                    //store the generated content
+                    $reflector = new \ReflectionClass($customRepositoryClassName);
+                    $originalRepostoryPath = $reflector->getFileName();
+                    $fullPath = str_replace('.php', 'Base.php', $originalRepostoryPath);
 
-                if (!empty($customRepositoryClassName)) {
-                    $this->persistClass($fullPath, $renderedTemplate);
+                    if (!empty($customRepositoryClassName)) {
+                        $this->persistClass($fullPath, $renderedTemplate);
+                    }
                 }
             }
         }
     }
 
-    /**
-     * Create the path
-     *
-     * @param string $path
-     */
     protected function createRepertory($path)
     {
         $fs = new Filesystem();
         $fs->mkdir($path);
     }
 
-    /**
-     *
-     * @param string $filePath
-     * @param string $content
-     */
     protected function persistClass($filePath, $content)
     {
         $directory = $this->getDirectoryFromFilepath($filePath);
@@ -124,12 +112,7 @@ class RepositoryGenerator
         $this->putFileContent($filePath, $content);
     }
 
-    /**
-     *
-     * @param string $filePath
-     * @return string the directory path
-     */
-    protected function getDirectoryFromFilepath($filePath)
+    protected function getDirectoryFromFilepath($filePath): string
     {
         $pathParts = explode('/', $filePath);
         array_pop($pathParts);
@@ -137,12 +120,7 @@ class RepositoryGenerator
         return implode('/', $pathParts);
     }
 
-    /**
-     *
-     * @param string $filePath
-     * @return string the namespace
-     */
-    protected function getNamespaceFromFilepath($filePath)
+    protected function getNamespaceFromFilepath($filePath): string
     {
         $pathParts = explode('\\', $filePath);
         array_pop($pathParts);
@@ -150,16 +128,7 @@ class RepositoryGenerator
         return implode('\\', $pathParts);
     }
 
-    /**
-     *
-     * @param string $namespace
-     * @param string $entityClasspath
-     * @param string $entityClassname
-     * @param string $bundleName
-     * @param string $entityDql
-     * @return type
-     */
-    protected function renderTopClass($namespace, $entityClasspath, $entityClassname, $bundleName, $entityDql)
+    protected function renderTopClass($namespace, $entityClasspath, $entityClassname, $bundleName, $entityDql): string
     {
         //services
         $twig = $this->twig;
@@ -177,11 +146,7 @@ class RepositoryGenerator
         return $twig->render($this->topRepositoryTemple, $topClassparameter);
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function renderAssociation($associationMapping, $entityDql)
+    protected function renderAssociation($associationMapping, $entityDql): string
     {
         //services
         $twig = $this->twig;
@@ -196,11 +161,7 @@ class RepositoryGenerator
         return $twig->render($this->associationTemplate, $parameters);
     }
 
-    /**
-     *
-     * @return string
-     */
-    protected function renderField($fieldMapping, $entityDql)
+    protected function renderField($fieldMapping, $entityDql): string
     {
         //services
         $twig = $this->twig;
@@ -215,44 +176,9 @@ class RepositoryGenerator
         return $twig->render($this->columnTemplate, $parameters);
     }
 
-    /**
-     * Store the content in the cache file
-     *
-     * @param string $fileName
-     * @param string $content
-     */
     protected function putFileContent($fileName, $content)
     {
         // Stores the cache
         file_put_contents($fileName, $content);
-    }
-
-    /**
-     *
-     * @param array $bundles
-     * @return Ambigous <multitype:, \tbn\QueryBuilderRepositoryGeneratorBundle\Generator\metadata>
-     */
-    protected function getAllMetadata($bundles)
-    {
-        $metadata = array();
-        foreach ($bundles as $name) {
-            $metadata = $this->getAllMetadataFromBundle($name);
-        }
-
-        return $metadata;
-    }
-
-    /**
-     *
-     * @param string $bundleName
-     * @return metadata
-     */
-    protected function getAllMetadataFromBundle($bundleName)
-    {
-        $manager = new DisconnectedMetadataFactory($this->doctrine);
-
-        $bundle = $this->kernel->getBundle($bundleName);
-
-        return $manager->getBundleMetadata($bundle);
     }
 }

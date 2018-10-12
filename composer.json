@@ -3,5 +3,9 @@
     "description": "Generate filters for queryBuilder in a repository",
     "autoload": {
         "psr-4": { "tbn\\QueryBuilderRepositoryGeneratorBundle\\": "" }
+    },
+    "require": {
+        "php": "^7.0.8",
+        "symfony/maker-bundle": "^1.7"
     }
 }

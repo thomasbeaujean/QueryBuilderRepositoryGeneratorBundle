@@ -18,34 +18,16 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 {
     protected static $parameterIndex = 0;
 
-    /**
-     * Get a new parameter index
-     *
-     * @return integer The index
-     */
-    public static function getParameterIndex()
+    public static function getParameterIndex(): string
     {
         return '{{ entityDql }}'.static::$parameterIndex++;
     }
 
-    /**
-     * Get a new query builder
-     *
-     * @return QueryBuilder
-     */
-    public function getNewQueryBuilder()
+    public function getNewQueryBuilder(): QueryBuilder
     {
         return $this->createQueryBuilder('{{ entityDql }}');
     }
 
-    /**
-     * Get the result of the query builder
-     *
-     * @param QueryBuilder $qb
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return ArrayCollection The results
-     */
     public static function getQueryBuilderResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
     {
         $query = $qb->getQuery();
@@ -55,14 +37,6 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getResult();
     }
 
-    /**
-     * Get the SingleResult of the query builder
-     *
-     * @param QueryBuilder $qb
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return Object The results
-     */
     public static function getQueryBuilderSingleResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
     {
         $query = $qb->getQuery();
@@ -72,14 +46,6 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getSingleResult();
     }
 
-    /**
-     * Get the OneOrNullResult of the query builder
-     *
-     * @param QueryBuilder $qb
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return Object The entity
-     */
     public static function getQueryBuilderOneOrNullResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
     {
         $query = $qb->getQuery();
@@ -89,14 +55,6 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getOneOrNullResult();
     }
 
-    /**
-     * Get the getArrayResult of the query builder
-     *
-     * @param QueryBuilder $qb
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return array The results
-     */
     public static function getQueryBuilderArrayResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
     {
         $query = $qb->getQuery();
@@ -106,14 +64,6 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getArrayResult();
     }
 
-    /**
-     * Get the getSingleArrayResult of the query builder
-     *
-     * @param QueryBuilder $qb
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return array The results
-     */
     public static function getQueryBuilderSingleArrayResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
     {
         $query = $qb->getQuery();
@@ -123,14 +73,6 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getSingleResult(Query::HYDRATE_ARRAY);
     }
 
-    /**
-     * Get the ScalarResult of the query builder
-     *
-     * @param QueryBuilder $qb
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return Object The results
-     */
     public static function getQueryBuilderScalarResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
     {
         $query = $qb->getQuery();
@@ -140,14 +82,6 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getScalarResult();
     }
 
-    /**
-     * Get the SingleScalarResult of the query builder
-     *
-     * @param QueryBuilder $qb
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return Object The results
-     */
     public static function getQueryBuilderSingleScalarResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
     {
         $query = $qb->getQuery();
@@ -157,14 +91,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getSingleScalarResult();
     }
 
-    /**
-     * Does this entity exists in database
-     * It guess that the entity has an ID property has identifier
-     *
-     * @param DoctrineEntity $entity
-     * @return boolean The entity exists
-     */
-    public function exists($entity)
+    public function exists($entity): bool
     {
         if (null === $entity) {
             throw new \LogicException('The entity parameter must be provided, it can not be null');
@@ -186,11 +113,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $exists;
     }
 
-    /**
-     * Get a new delete query builder
-     * @return QueryBuilder
-     */
-    public function getDeleteQueryBuilder()
+    public function getDeleteQueryBuilder(): QueryBuilder
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->delete($this->_entityName, '{{ entityDql }}');
@@ -198,14 +121,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $qb;
     }
 
-    /**
-     * @param QueryBuilder $qb
-     * @param string       $columnName     default 'id'
-     * @param boolean      $useQueryCache  default false
-     * @param boolean      $useResultCache default false
-     * @return boolean
-     */
-    public static function existsByQueryBuilder(QueryBuilder $qb, $columnName = 'id', $useQueryCache = false, $useResultCache = false)
+    public static function existsByQueryBuilder(QueryBuilder $qb, $columnName = 'id', $useQueryCache = false, $useResultCache = false): bool
     {
         $exists = false;
         $qb->select($qb->expr()->count('{{ entityDql }}.'.$columnName));

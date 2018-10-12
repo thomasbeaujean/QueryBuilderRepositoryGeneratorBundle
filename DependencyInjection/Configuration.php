@@ -5,19 +5,8 @@ namespace tbn\QueryBuilderRepositoryGeneratorBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
- */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * (non-PHPdoc)
-     * @see \Symfony\Component\Config\Definition\ConfigurationInterface::getConfigTreeBuilder()
-     *
-     * @return TreeBuilder
-     */
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
@@ -35,16 +24,16 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('top_repository')
-                            ->defaultValue("QueryBuilderRepositoryGeneratorBundle:Generator:TopRepositoryTemplate.html.twig")
+                            ->defaultValue('@QueryBuilderRepositoryGenerator/Generator/TopRepositoryTemplate.html.twig')
                         ->end()
                         ->scalarNode('column')
-                            ->defaultValue("QueryBuilderRepositoryGeneratorBundle:Generator:ColumnTemplate.html.twig")
+                            ->defaultValue( '@QueryBuilderRepositoryGenerator/Generator/ColumnTemplate.html.twig')
                         ->end()
                         ->scalarNode('association')
-                            ->defaultValue("QueryBuilderRepositoryGeneratorBundle:Generator:AssociationTemplate.html.twig")
+                            ->defaultValue('@QueryBuilderRepositoryGenerator//Generator/AssociationTemplate.html.twig')
                         ->end()
                         ->scalarNode('bottom_repository')
-                            ->defaultValue("QueryBuilderRepositoryGeneratorBundle:Generator:BottomRepositoryTemplate.html.twig")
+                            ->defaultValue('@QueryBuilderRepositoryGenerator/Generator/BottomRepositoryTemplate.html.twig')
                         ->end()
                     ->end()
                 ->end()
