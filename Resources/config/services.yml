@@ -15,3 +15,8 @@ services:
         arguments:
             - "%tbn_qbrg.generator.template.entity_configuration%"
             - "%tbn_qbrg.generator.template.repository_extension%"
+    tbn_qbrg.command.generate_command:
+        class: tbn\QueryBuilderRepositoryGeneratorBundle\Command\GenerateCommand
+        arguments:
+            - "@tbn_qbrg.generator.repository_generator"
+        tags: ['console.command']

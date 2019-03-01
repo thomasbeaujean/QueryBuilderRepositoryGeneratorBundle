@@ -3,23 +3,32 @@
 namespace tbn\QueryBuilderRepositoryGeneratorBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator;
 
-class GenerateCommand extends ContainerAwareCommand
+class GenerateCommand extends Command
 {
+    protected static $defaultName = 'qbrg:generate';
+
+    /** @var RepositoryGenerator  */
+    private $repositoryGenerator;
+
+    public function __construct(RepositoryGenerator $repositoryGenerator)
+    {
+        parent::__construct();
+        $this->repositoryGenerator = $repositoryGenerator;
+    }
+
     protected function configure()
     {
-        $this->setName('qbrg:generate');
         $this->setDescription('Regenerate the Base Repository with the Query Builder Repository Generator');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /* @var $generator RepositoryGenerator */
-        $generator = $this->getContainer()->get('tbn_qbrg.generator.repository_generator');
-        $generator->generateFiles();
+        $this->repositoryGenerator->generateFiles();
 
         $output->writeln('<info>The repositories have been regenerated</info>');
     }
