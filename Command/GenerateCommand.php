@@ -2,7 +2,6 @@
 
 namespace tbn\QueryBuilderRepositoryGeneratorBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,5 +30,7 @@ class GenerateCommand extends Command
         $this->repositoryGenerator->generateFiles();
 
         $output->writeln('<info>The repositories have been regenerated</info>');
+
+        return Command::SUCCESS;
     }
 }
