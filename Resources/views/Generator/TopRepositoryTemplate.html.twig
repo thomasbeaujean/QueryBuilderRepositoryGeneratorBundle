@@ -18,6 +18,11 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 {
     protected static $parameterIndex = 0;
 
+    public static function getName(): string
+    {
+        return '{{ entityDql }}';
+    }
+
     public static function getParameterIndex(): string
     {
         return '{{ entityDql }}'.static::$parameterIndex++;
