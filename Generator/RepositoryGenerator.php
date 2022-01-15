@@ -19,8 +19,17 @@ class RepositoryGenerator
      */
     private  $twig;
 
-    public function __construct($topRepositoryTemple, $columnTemplate, $bottomRepositoryTemplate, $bundles, DoctrineHelper $doctrineHelper, $kernel, Configurator $configurator, $associationTemplate)
-    {
+    public function __construct(
+        $topRepositoryTemple,
+        $columnTemplate,
+        $bottomRepositoryTemplate,
+        $bundles,
+        DoctrineHelper $doctrineHelper,
+        $kernel,
+        Configurator $configurator,
+        $associationTemplate,
+        $twig
+    ) {
         $this->doctrineHelper = $doctrineHelper;
         $this->kernel = $kernel;
         //the bundles to scan
@@ -33,6 +42,7 @@ class RepositoryGenerator
         $this->associationTemplate = $associationTemplate;
 
         $this->configurator = $configurator;
+        $this->twig = $twig;
     }
 
     /**
@@ -41,8 +51,6 @@ class RepositoryGenerator
      */
     public function generateFiles()
     {
-        $this->twig = $this->kernel->getContainer()->get('twig');
-
         //the bundles to scan
         $bundles = $this->bundles;
         $configurator = $this->configurator;

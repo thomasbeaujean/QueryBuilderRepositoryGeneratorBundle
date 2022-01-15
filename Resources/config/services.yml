@@ -10,6 +10,7 @@ services:
             - "@kernel"
             - "@tbn_qbrg.configuration.configurator"
             - "%tbn_qbrg.generator.template.association%"
+            - "@twig"
     tbn_qbrg.configuration.configurator:
         class: tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator
         arguments:
