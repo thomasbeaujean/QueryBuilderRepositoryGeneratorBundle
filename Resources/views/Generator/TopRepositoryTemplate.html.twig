@@ -6,6 +6,7 @@
  */
 namespace {{ namespace }};
 
+use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
@@ -138,4 +139,18 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         }
 
         return $exists;
+    }
+
+    public function findOne($id): \{{ entityClasspath }}
+    {
+        $qb = $this->getNewQueryBuilder();
+        static::filterById($qb, $id);
+
+        try {
+            $entity = static::getQueryBuilderSingleResult($qb);
+        } catch (EntityNotFoundException $ex) {
+            throw EntityNotFoundException::fromClassNameAndIdentifier(\{{ entityClasspath }}::class, [$id]);
+        }
+
+        return $entity;
     }

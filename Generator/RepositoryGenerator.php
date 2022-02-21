@@ -145,6 +145,7 @@ class RepositoryGenerator
 
         $topClassparameter = array(
             'namespace' => $namespace,
+            'entityClasspath' => $entityClasspath,
             'entityClassname' => $entityClassname,
             'extendClass' => $extendClass,
             'bundleName' => $bundleName,
