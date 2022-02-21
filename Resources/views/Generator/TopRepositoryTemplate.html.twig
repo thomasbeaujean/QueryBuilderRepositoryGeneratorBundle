@@ -7,6 +7,7 @@
 namespace {{ namespace }};
 
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
@@ -148,7 +149,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 
         try {
             $entity = static::getQueryBuilderSingleResult($qb);
-        } catch (EntityNotFoundException $ex) {
+        } catch (EntityNotFoundException|NoResultException $ex) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(\{{ entityClasspath }}::class, [$id]);
         }
 
