@@ -78,7 +78,13 @@ class RepositoryGenerator
                     $entityDql = $configurator->getEntityDqlName($meta->name);
 
                     $entityNamespace = $this->getNamespaceFromFilepath($customRepositoryClassName);
-                    $renderedTemplate = $this->renderTopClass($entityNamespace, $entityClasspath, $entityClassname, $bundleName, $entityDql);
+
+                    $idType = null;
+                    if (isset($meta->fieldMappings['id'])) {
+                        $idField = $meta->fieldMappings['id'];
+                        $idType = $idField['type'];
+                    }
+                    $renderedTemplate = $this->renderTopClass($entityNamespace, $entityClasspath, $entityClassname, $bundleName, $entityDql, $idType);
 
                     //parse the columns
                     foreach ($fieldMappings as $fieldMapping) {
@@ -136,7 +142,7 @@ class RepositoryGenerator
         return implode('\\', $pathParts);
     }
 
-    protected function renderTopClass($namespace, $entityClasspath, $entityClassname, $bundleName, $entityDql): string
+    protected function renderTopClass($namespace, $entityClasspath, $entityClassname, $bundleName, $entityDql, $idType): string
     {
         //services
         $twig = $this->twig;
@@ -150,6 +156,7 @@ class RepositoryGenerator
             'extendClass' => $extendClass,
             'bundleName' => $bundleName,
             'entityDql' => $entityDql,
+            'idType' => $idType,
         );
 
         return $twig->render($this->topRepositoryTemple, $topClassparameter);

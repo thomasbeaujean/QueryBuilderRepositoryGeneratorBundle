@@ -11,6 +11,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * Generated class for filter query builders
@@ -144,6 +145,12 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 
     public function findOne($id): \{{ entityClasspath }}
     {
+{% if idType == 'uuid' %}
+        // Id is an UUID, so it might be a string or Uuid instance
+        if (is_string($id)) {
+            $id = Uuid::fromString($id);
+        }
+{% endif %}
         $qb = $this->getNewQueryBuilder();
         static::filterById($qb, $id);
 
