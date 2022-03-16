@@ -92,7 +92,8 @@ class RepositoryGenerator
                     }
 
                     foreach ($associationMappings as $associationMapping) {
-                        $renderedTemplate .= $this->renderAssociation($associationMapping, $entityDql);
+                        $targetEntityMetadata = $allMetadata[$associationMapping['targetEntity']];
+                        $renderedTemplate .= $this->renderAssociation($associationMapping, $entityDql, $targetEntityMetadata);
                     }
 
                     //get the bottom template
@@ -162,16 +163,25 @@ class RepositoryGenerator
         return $twig->render($this->topRepositoryTemple, $topClassparameter);
     }
 
-    protected function renderAssociation($associationMapping, $entityDql): string
+    protected function renderAssociation($associationMapping, $entityDql, $targetEntityMetadata): string
     {
         //services
         $twig = $this->twig;
+
+        $idType = null;
+
+        if (isset($targetEntityMetadata->fieldMappings['id'])) {
+            $idField = $targetEntityMetadata->fieldMappings['id'];
+            $idType = $idField['type'];
+        }
 
         $fieldName = $associationMapping['fieldName'];
         $parameters = array(
             'entityDql' => $entityDql,
             'column' => ucfirst($fieldName),
             'columnDql' => $fieldName,
+            'idType' => $idType,
+            'targetEntity' => $associationMapping['targetEntity'],
         );
 
         return $twig->render($this->associationTemplate, $parameters);

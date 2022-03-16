@@ -15,7 +15,26 @@
             }
         } else {
             $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
+{% if idType == 'uuid' %}
+            // by default we use the value
+            $id = $value;
+            // Id is an UUID, so it might be a string, an Uuid instance, an enum, or the object
+            if (is_object($value)) {
+                $ref = new \ReflectionClass($value);
+                if ($ref->isEnum()) {
+                    $value = $value->value;
+                }
+            }
+            if (is_string($value)) {
+                $id = Uuid::fromString($value);
+            }
+            if ($value instanceof \{{targetEntity}}) {
+                $id = $value->getId();
+            }
+            $qb->setParameter($parameterName, $id);
+{% else %}
             $qb->setParameter($parameterName, $value->getId());
+{% endif %}
         }
 
         return $qb;
