@@ -145,9 +145,6 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 
     public function findOne($id): \{{ entityClasspath }}
     {
-{% if idType == 'uuid' %}
-        // Id is an UUID, so it might be a string, an enum or Uuid instance
-
         // try to extract the value from an enum
         if (is_object($id)) {
             $ref = new \ReflectionClass($id);
@@ -155,6 +152,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
                 $id = $id->value;
             }
         }
+{% if idType == 'uuid' %}
         if (is_string($id)) {
             $id = Uuid::fromString($id);
         }
