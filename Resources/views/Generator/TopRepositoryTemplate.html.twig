@@ -36,65 +36,58 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $this->createQueryBuilder('{{ entityDql }}');
     }
 
-    public static function getQueryBuilderResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
+    public static function getQueryBuilderResult(QueryBuilder $qb, $useQueryCache = false)
     {
         $query = $qb->getQuery();
         $query->useQueryCache($useQueryCache);
-        $query->useResultCache($useResultCache);
 
         return $query->getResult();
     }
 
-    public static function getQueryBuilderSingleResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
+    public static function getQueryBuilderSingleResult(QueryBuilder $qb, $useQueryCache = false)
     {
         $query = $qb->getQuery();
         $query->useQueryCache($useQueryCache);
-        $query->useResultCache($useResultCache);
 
         return $query->getSingleResult();
     }
 
-    public static function getQueryBuilderOneOrNullResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
+    public static function getQueryBuilderOneOrNullResult(QueryBuilder $qb, $useQueryCache = false)
     {
         $query = $qb->getQuery();
         $query->useQueryCache($useQueryCache);
-        $query->useResultCache($useResultCache);
 
         return $query->getOneOrNullResult();
     }
 
-    public static function getQueryBuilderArrayResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
+    public static function getQueryBuilderArrayResult(QueryBuilder $qb, $useQueryCache = false)
     {
         $query = $qb->getQuery();
         $query->useQueryCache($useQueryCache);
-        $query->useResultCache($useResultCache);
 
         return $query->getArrayResult();
     }
 
-    public static function getQueryBuilderSingleArrayResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
+    public static function getQueryBuilderSingleArrayResult(QueryBuilder $qb, $useQueryCache = false)
     {
         $query = $qb->getQuery();
         $query->useQueryCache($useQueryCache);
-        $query->useResultCache($useResultCache);
 
         return $query->getSingleResult(Query::HYDRATE_ARRAY);
     }
 
-    public static function getQueryBuilderScalarResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
+    public static function getQueryBuilderScalarResult(QueryBuilder $qb, $useQueryCache = false)
     {
         $query = $qb->getQuery();
         $query->useQueryCache($useQueryCache);
-        $query->useResultCache($useResultCache);
 
         return $query->getScalarResult();
     }
 
-    public static function getQueryBuilderSingleScalarResult(QueryBuilder $qb, $useQueryCache = false, $useResultCache = false)
+    public static function getQueryBuilderSingleScalarResult(QueryBuilder $qb, $useQueryCache = false)
     {
         $query = $qb->getQuery();
         $query->useQueryCache($useQueryCache);
-        $query->useResultCache($useResultCache);
 
         return $query->getSingleScalarResult();
     }
@@ -129,12 +122,12 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $qb;
     }
 
-    public static function existsByQueryBuilder(QueryBuilder $qb, $columnName = 'id', $useQueryCache = false, $useResultCache = false): bool
+    public static function existsByQueryBuilder(QueryBuilder $qb, $columnName = 'id', $useQueryCache = false): bool
     {
         $exists = false;
         $qb->select($qb->expr()->count('{{ entityDql }}.'.$columnName));
 
-        $count = static::getQueryBuilderSingleScalarResult($qb, $useQueryCache, $useResultCache);
+        $count = static::getQueryBuilderSingleScalarResult($qb, $useQueryCache);
 
         if ($count > 0) {
             $exists = true;
