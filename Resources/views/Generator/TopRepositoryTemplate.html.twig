@@ -92,6 +92,14 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         return $query->getSingleScalarResult();
     }
 
+    public static function getQueryBuilderCount(QueryBuilder $qb, $entityName = '{{ entityDql }}'): int
+    {
+        $qb->select('count('.$entityName.') as total');
+        $total = self::getQueryBuilderSingleArrayResult($qb);
+
+        return $total['total'];
+    }
+
     public function exists($entity): bool
     {
         if (null === $entity) {
