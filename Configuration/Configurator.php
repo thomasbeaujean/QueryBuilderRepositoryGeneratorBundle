@@ -4,7 +4,7 @@ namespace tbn\QueryBuilderRepositoryGeneratorBundle\Configuration;
 
 class Configurator
 {
-    const DEFAULT_REPOSITORY_EXTEND = '\\Doctrine\\ORM\\EntityRepository';
+    const DEFAULT_REPOSITORY_EXTEND = '\\Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository';
     protected $entityConfigurations = [];
 
     public function __construct($entityConfigurations, $repositoryExtensions)

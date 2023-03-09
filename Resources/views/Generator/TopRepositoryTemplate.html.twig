@@ -11,6 +11,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
 /**
@@ -20,6 +21,11 @@ use Symfony\Component\Uid\Uuid;
 class {{ entityClassname }}Base extends {{ extendClass }}
 {
     protected static $parameterIndex = 0;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, \{{ entityClasspath }}::class);
+    }
 
     public static function getName(): string
     {
