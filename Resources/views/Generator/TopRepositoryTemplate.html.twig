@@ -22,9 +22,9 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 {
     protected static $parameterIndex = 0;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, string $entity = \{{ entityClasspath }}::class)
     {
-        parent::__construct($registry, \{{ entityClasspath }}::class);
+        parent::__construct($registry, $entity);
     }
 
     public static function getName(): string
