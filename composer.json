@@ -4,8 +4,22 @@
     "autoload": {
         "psr-4": { "tbn\\QueryBuilderRepositoryGeneratorBundle\\": "" }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "tbn\\QueryBuilderRepositoryGeneratorBundle\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "symfony/class-loader": "2.3.*",
+        "nyholm/symfony-bundle-test": "^2.0",
+        "phpunit/phpunit": "^10.3"
+    },
     "require": {
-        "php": ">=7.0.8",
-        "symfony/maker-bundle": "^1.7"
+        "php": "^8.1",
+        "symfony/maker-bundle": "^1.7",
+        "symfony/framework-bundle": "^5.4|^6.0",
+        "doctrine/doctrine-bundle": "^2.10",
+        "symfony/twig-bundle": "^5.4|^6.0",
+        "doctrine/orm": "^2.10"
     }
 }

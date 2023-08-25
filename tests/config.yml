@@ -1,0 +1,16 @@
+doctrine:
+  dbal:
+    driver: pdo_pgsql
+  orm:
+    auto_generate_proxy_classes: true
+    auto_mapping: true
+    mappings:
+      App:
+        is_bundle: false
+        dir: '%kernel.project_dir%/tests/src/Entity'
+        prefix: 'tbn\QueryBuilderRepositoryGeneratorBundle\Tests\src\Entity'
+        alias: App
+        type: attribute
+query_builder_repository_generator:
+  bundles:
+    - "tbn\\QueryBuilderRepositoryGeneratorBundle"

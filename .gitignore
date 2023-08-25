@@ -1,0 +1,6 @@
+/vendor
+/.phpunit.result.cache
+/.phpunit.cache/test-results
+/tests/visualizer-default.yml
+/composer.lock
+/tests/src/Repository/MyClassRepositoryBase.php

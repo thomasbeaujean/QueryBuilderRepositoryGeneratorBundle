@@ -5,15 +5,14 @@ namespace tbn\QueryBuilderRepositoryGeneratorBundle\Configuration;
 class Configurator
 {
     const DEFAULT_REPOSITORY_EXTEND = '\\Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository';
-    protected $entityConfigurations = [];
 
-    public function __construct($entityConfigurations, $repositoryExtensions)
-    {
-        $this->entityConfigurations = $entityConfigurations;
-        $this->repositoryExtensions = $repositoryExtensions;
+    public function __construct(
+        private array $entityConfigurations = [],
+        private array $repositoryExtensions = [],
+    ) {
     }
 
-    public function getEntityDqlName($entityName): string
+    public function getEntityDqlName(string $entityName): string
     {
         if (isset($this->entityConfigurations[$entityName])) {
             $entityDqlName = $this->entityConfigurations[$entityName]['querybuilder_name'];
