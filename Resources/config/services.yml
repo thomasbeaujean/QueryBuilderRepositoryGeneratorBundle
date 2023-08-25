@@ -2,20 +2,27 @@ services:
     tbn_qbrg.generator.repository_generator:
         class: tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator
         arguments:
-            - "%tbn_qbrg.generator.template.top_repository%"
-            - "%tbn_qbrg.generator.template.column%"
-            - "%tbn_qbrg.generator.template.bottom_repository%"
+            - "@tbn\\QueryBuilderRepositoryGeneratorBundle\\Generator\\TemplateService"
             - "%tbn_qbrg.generator.bundles%"
             - "@maker.doctrine_helper"
-            - "@kernel"
             - "@tbn_qbrg.configuration.configurator"
-            - "%tbn_qbrg.generator.template.association%"
-            - "@twig"
+            - "@tbn\\QueryBuilderRepositoryGeneratorBundle\\Generator\\Persister"
+            - "@logger"
     tbn_qbrg.configuration.configurator:
         class: tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator
         arguments:
             - "%tbn_qbrg.generator.template.entity_configuration%"
             - "%tbn_qbrg.generator.template.repository_extension%"
+    tbn\QueryBuilderRepositoryGeneratorBundle\Generator\Persister:
+        class: tbn\QueryBuilderRepositoryGeneratorBundle\Generator\Persister
+    tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService:
+        class: tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService
+        arguments:
+            - "%tbn_qbrg.generator.template.top_repository%"
+            - "%tbn_qbrg.generator.template.column%"
+            - "%tbn_qbrg.generator.template.bottom_repository%"
+            - "%tbn_qbrg.generator.template.association%"
+            - "@twig"
     tbn_qbrg.command.generate_command:
         class: tbn\QueryBuilderRepositoryGeneratorBundle\Command\GenerateCommand
         arguments:
