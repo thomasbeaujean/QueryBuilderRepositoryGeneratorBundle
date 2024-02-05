@@ -32,8 +32,12 @@ class TemplateService
         return $this->twig->render($this->topRepositoryTemple, $topClassparameter);
     }
 
-    public function renderAssociation(array $associationMapping, string $entityDql, ClassMetadata $targetEntityMetadata): string
-    {
+    public function renderAssociation(
+        array $associationMapping,
+        string $entityDql,
+        ClassMetadata $targetEntityMetadata,
+        string $entityDqlTargeted,
+    ): string {
         $idType = null;
 
         if (isset($targetEntityMetadata->fieldMappings['id'])) {
@@ -48,6 +52,7 @@ class TemplateService
             'columnDql' => $fieldName,
             'idType' => $idType,
             'targetEntity' => $associationMapping['targetEntity'],
+            'entityDqlTargeted' => $entityDqlTargeted,
         );
 
         return $this->twig->render($this->associationTemplate, $parameters);

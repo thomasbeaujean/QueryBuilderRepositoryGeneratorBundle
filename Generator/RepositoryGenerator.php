@@ -89,7 +89,13 @@ class RepositoryGenerator
 
         foreach ($associationMappings as $associationMapping) {
             $targetEntityMetadata = $allMetadata[$associationMapping['targetEntity']];
-            $renderedTemplate .= $this->templateService->renderAssociation($associationMapping, $entityDql, $targetEntityMetadata);
+
+            $renderedTemplate .= $this->templateService->renderAssociation(
+                $associationMapping,
+                $entityDql,
+                $targetEntityMetadata,
+                $this->configurator->getEntityDqlName($associationMapping['targetEntity']),
+            );
         }
 
         //get the bottom template

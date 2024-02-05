@@ -93,3 +93,10 @@
 
         return $qb;
     }
+
+    public static function join{{ column }}(QueryBuilder $qb, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}', $entityDqlTargeted = '{{ entityDqlTargeted }}'): QueryBuilder
+    {
+        $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
+
+        return $qb;
+    }
