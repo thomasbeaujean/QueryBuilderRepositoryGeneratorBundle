@@ -25,7 +25,7 @@ class GenerateCommand extends Command
         $this->setDescription('Regenerate the Base Repository with the Query Builder Repository Generator');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->repositoryGenerator->generateFiles();
 
