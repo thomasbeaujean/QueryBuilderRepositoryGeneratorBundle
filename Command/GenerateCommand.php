@@ -2,15 +2,17 @@
 
 namespace tbn\QueryBuilderRepositoryGeneratorBundle\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator;
 
+#[AsCommand(
+    name: 'qbrg:generate',
+)]
 class GenerateCommand extends Command
 {
-    protected static $defaultName = 'qbrg:generate';
-
     /** @var RepositoryGenerator  */
     private $repositoryGenerator;
 
