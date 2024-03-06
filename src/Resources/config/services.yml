@@ -1,22 +1,22 @@
 services:
     tbn_qbrg.generator.repository_generator:
-        class: tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator
+        class: Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator
         arguments:
-            - "@tbn\\QueryBuilderRepositoryGeneratorBundle\\Generator\\TemplateService"
+            - "@Tbn\\QueryBuilderRepositoryGeneratorBundle\\Generator\\TemplateService"
             - "%tbn_qbrg.generator.bundles%"
             - "@maker.doctrine_helper"
             - "@tbn_qbrg.configuration.configurator"
-            - "@tbn\\QueryBuilderRepositoryGeneratorBundle\\Generator\\Persister"
+            - "@Tbn\\QueryBuilderRepositoryGeneratorBundle\\Generator\\Persister"
             - "@logger"
     tbn_qbrg.configuration.configurator:
-        class: tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator
+        class: Tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator
         arguments:
             - "%tbn_qbrg.generator.template.entity_configuration%"
             - "%tbn_qbrg.generator.template.repository_extension%"
-    tbn\QueryBuilderRepositoryGeneratorBundle\Generator\Persister:
-        class: tbn\QueryBuilderRepositoryGeneratorBundle\Generator\Persister
-    tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService:
-        class: tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService
+    Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\Persister:
+        class: Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\Persister
+    Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService:
+        class: Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService
         arguments:
             - "%tbn_qbrg.generator.template.top_repository%"
             - "%tbn_qbrg.generator.template.column%"
@@ -24,7 +24,7 @@ services:
             - "%tbn_qbrg.generator.template.association%"
             - "@twig"
     tbn_qbrg.command.generate_command:
-        class: tbn\QueryBuilderRepositoryGeneratorBundle\Command\GenerateCommand
+        class: Tbn\QueryBuilderRepositoryGeneratorBundle\Command\GenerateCommand
         arguments:
             - "@tbn_qbrg.generator.repository_generator"
         tags: ['console.command']

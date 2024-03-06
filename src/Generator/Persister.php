@@ -1,6 +1,6 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
 use Symfony\Component\Filesystem\Filesystem;
 

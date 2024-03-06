@@ -1,6 +1,6 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

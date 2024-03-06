@@ -1,9 +1,9 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
+use Tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
 use Twig\Environment;
 
 class TemplateService

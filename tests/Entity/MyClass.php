@@ -1,11 +1,11 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\Tests\src\Entity;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-use tbn\QueryBuilderRepositoryGeneratorBundle\Tests\src\Repository\MyClassRepository;
+use Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Repository\MyClassRepository;
 
 #[ORM\Entity(repositoryClass:MyClassRepository::class)]
 class MyClass

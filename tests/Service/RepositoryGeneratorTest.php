@@ -1,6 +1,6 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Service;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Service;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -8,8 +8,8 @@ use Nyholm\BundleTest\TestKernel;
 use Symfony\Bundle\MakerBundle\MakerBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\HttpKernel\KernelInterface;
-use tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator;
-use tbn\QueryBuilderRepositoryGeneratorBundle\QueryBuilderRepositoryGeneratorBundle;
+use Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator;
+use Tbn\QueryBuilderRepositoryGeneratorBundle\QueryBuilderRepositoryGeneratorBundle;
 
 class RepositoryGeneratorTest extends KernelTestCase
 {
@@ -47,7 +47,7 @@ class RepositoryGeneratorTest extends KernelTestCase
         $service->generateFiles();
 
         $expectedContent = \file_get_contents(__DIR__.'/ExpectedMyClassRepositoryBase.txt');
-        $content = \file_get_contents(__DIR__.'/../src/Repository/MyClassRepositoryBase.php');
+        $content = \file_get_contents(__DIR__.'/../Repository/MyClassRepositoryBase.php');
         $this->assertSame($expectedContent, $content);
     }
 }
