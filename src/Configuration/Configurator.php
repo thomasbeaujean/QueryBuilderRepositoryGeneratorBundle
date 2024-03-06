@@ -1,6 +1,6 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\Configuration;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Configuration;
 
 class Configurator
 {

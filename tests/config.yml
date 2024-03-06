@@ -7,10 +7,10 @@ doctrine:
     mappings:
       App:
         is_bundle: false
-        dir: '%kernel.project_dir%/tests/src/Entity'
-        prefix: 'tbn\QueryBuilderRepositoryGeneratorBundle\Tests\src\Entity'
+        dir: '%kernel.project_dir%/tests/Entity'
+        prefix: 'Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity'
         alias: App
         type: attribute
 query_builder_repository_generator:
   bundles:
-    - "tbn\\QueryBuilderRepositoryGeneratorBundle"
+    - "Tbn\\QueryBuilderRepositoryGeneratorBundle"

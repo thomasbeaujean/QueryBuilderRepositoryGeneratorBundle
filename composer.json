@@ -2,11 +2,13 @@
     "name": "tbn/query-builder-repository-generator-bundle",
     "description": "Generate filters for queryBuilder in a repository",
     "autoload": {
-        "psr-4": { "tbn\\QueryBuilderRepositoryGeneratorBundle\\": "" }
+        "psr-4": {
+            "Tbn\\QueryBuilderRepositoryGeneratorBundle\\": "src/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "tbn\\QueryBuilderRepositoryGeneratorBundle\\Tests\\": "tests/"
+            "Tbn\\QueryBuilderRepositoryGeneratorBundle\\Tests\\": "tests/"
         }
     },
     "require-dev": {

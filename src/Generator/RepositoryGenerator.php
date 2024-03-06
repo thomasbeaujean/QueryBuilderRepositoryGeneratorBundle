@@ -1,11 +1,11 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\MakerBundle\Doctrine\DoctrineHelper;
-use tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
+use Tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
 
 class RepositoryGenerator
 {

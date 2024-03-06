@@ -1,12 +1,12 @@
 <?php
 
-namespace tbn\QueryBuilderRepositoryGeneratorBundle\Command;
+namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Command;
 
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator;
+use Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\RepositoryGenerator;
 
 #[AsCommand(
     name: 'qbrg:generate',
