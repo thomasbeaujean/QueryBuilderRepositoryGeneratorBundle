@@ -84,7 +84,11 @@ class RepositoryGenerator
 
         //parse the columns
         foreach ($fieldMappings as $fieldMapping) {
-            $renderedTemplate .= $this->templateService->renderField($fieldMapping, $entityDql);
+            $renderedTemplate .= $this->templateService->renderField(
+                $fieldMapping,
+                $entityDql,
+                $entityClasspath,
+            );
         }
 
         foreach ($associationMappings as $associationMapping) {
@@ -95,6 +99,7 @@ class RepositoryGenerator
                 $entityDql,
                 $targetEntityMetadata,
                 $this->configurator->getEntityDqlName($associationMapping['targetEntity']),
+                $entityClasspath,
             );
         }
 

@@ -49,3 +49,25 @@
 
         return $qb;
     }
+
+    public function findBy{{ column }}(mixed $value): array
+    {
+        $qb = $this->getNewQueryBuilder();
+        static::filterBy{{ column }}($qb, $value);
+
+        return static::getQueryBuilderResult($qb);
+    }
+
+    public function findOneBy{{ column }}(
+        mixed $value,
+        bool $allowNull = false,
+    ): ?\{{ entityClasspath }} {
+        $qb = $this->getNewQueryBuilder();
+        static::filterBy{{ column }}($qb, $value);
+
+        if ($allowNull) {
+            return static::getQueryBuilderOneOrNullResult($qb);
+        }
+
+        return static::getQueryBuilderSingleResult($qb);
+    }
