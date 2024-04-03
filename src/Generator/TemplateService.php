@@ -37,6 +37,7 @@ class TemplateService
         string $entityDql,
         ClassMetadata $targetEntityMetadata,
         string $entityDqlTargeted,
+        string $entityClasspath,
     ): string {
         $idType = null;
 
@@ -53,18 +54,23 @@ class TemplateService
             'idType' => $idType,
             'targetEntity' => $associationMapping['targetEntity'],
             'entityDqlTargeted' => $entityDqlTargeted,
+            'entityClasspath' => $entityClasspath,
         );
 
         return $this->twig->render($this->associationTemplate, $parameters);
     }
 
-    public function renderField($fieldMapping, $entityDql): string
-    {
+    public function renderField(
+        $fieldMapping,
+        $entityDql,
+        string $entityClasspath,
+    ): string {
         $fieldName = $fieldMapping['fieldName'];
         $parameters = array(
             'entityDql' => $entityDql,
             'column' => ucfirst($fieldName),
             'columnDql' => $fieldName,
+            'entityClasspath' => $entityClasspath,
         );
 
         return $this->twig->render($this->columnTemplate, $parameters);

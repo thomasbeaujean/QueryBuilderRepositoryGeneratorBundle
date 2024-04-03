@@ -222,6 +222,28 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
+    public function findById(mixed $value): array
+    {
+        $qb = $this->getNewQueryBuilder();
+        static::filterById($qb, $value);
+
+        return static::getQueryBuilderResult($qb);
+    }
+
+    public function findOneById(
+        mixed $value,
+        bool $allowNull = false,
+    ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
+        $qb = $this->getNewQueryBuilder();
+        static::filterById($qb, $value);
+
+        if ($allowNull) {
+            return static::getQueryBuilderOneOrNullResult($qb);
+        }
+
+        return static::getQueryBuilderSingleResult($qb);
+    }
+
     public static function filterByNumber(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'number'): QueryBuilder
     {
         if ($value === null) {
@@ -273,6 +295,28 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
+    public function findByNumber(mixed $value): array
+    {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByNumber($qb, $value);
+
+        return static::getQueryBuilderResult($qb);
+    }
+
+    public function findOneByNumber(
+        mixed $value,
+        bool $allowNull = false,
+    ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByNumber($qb, $value);
+
+        if ($allowNull) {
+            return static::getQueryBuilderOneOrNullResult($qb);
+        }
+
+        return static::getQueryBuilderSingleResult($qb);
+    }
+
     public static function filterByName(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'name'): QueryBuilder
     {
         if ($value === null) {
@@ -322,6 +366,28 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         }
 
         return $qb;
+    }
+
+    public function findByName(mixed $value): array
+    {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByName($qb, $value);
+
+        return static::getQueryBuilderResult($qb);
+    }
+
+    public function findOneByName(
+        mixed $value,
+        bool $allowNull = false,
+    ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByName($qb, $value);
+
+        if ($allowNull) {
+            return static::getQueryBuilderOneOrNullResult($qb);
+        }
+
+        return static::getQueryBuilderSingleResult($qb);
     }
 
     public static function filterByForeignClasses(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'foreignClasses'): QueryBuilder
@@ -419,5 +485,27 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
 
         return $qb;
+    }
+
+    public function findByForeignClasses(mixed $value): array
+    {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByForeignClasses($qb, $value);
+
+        return static::getQueryBuilderResult($qb);
+    }
+
+    public function findOneByForeignClasses(
+        mixed $value,
+        bool $allowNull = false,
+    ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByForeignClasses($qb, $value);
+
+        if ($allowNull) {
+            return static::getQueryBuilderOneOrNullResult($qb);
+        }
+
+        return static::getQueryBuilderSingleResult($qb);
     }
 }
