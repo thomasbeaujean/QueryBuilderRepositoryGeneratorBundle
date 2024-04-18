@@ -71,3 +71,14 @@
 
         return static::getQueryBuilderSingleResult($qb);
     }
+
+    public function existsBy{{ column }}(
+        mixed $value,
+    ): bool {
+        $qb = $this->getNewQueryBuilder();
+        static::filterBy{{ column }}($qb, $value);
+
+        return static::existsByQueryBuilder(
+            qb: $qb,
+        );
+    }
