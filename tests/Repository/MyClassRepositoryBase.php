@@ -477,7 +477,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
             foreach ($values as $value) {
                 if ($value !== null) {
-                    $ids[] = $value->getId();
+                    // by default we use the value
+                    $id = $value;
+                    if ($value instanceof \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\ForeignClass) {
+                        $id = $value->getId();
+                    }
+
+                    $ids[] = $id;
                 } else {
                     $orNull = ' OR '.$entityName.'.'.$columnName.' IS NULL';
                 }
