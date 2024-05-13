@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->arrayNode('bundles')
-                ->isRequired()
+                ->defaultValue(['App'])
                 ->requiresAtLeastOneElement()
                     ->prototype('scalar')
                     ->end()
