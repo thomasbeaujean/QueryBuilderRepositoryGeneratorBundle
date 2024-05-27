@@ -91,6 +91,7 @@ class RepositoryGenerator
             );
         }
 
+        /** @var \Doctrine\ORM\Mapping\OneToManyAssociationMapping */
         foreach ($associationMappings as $associationMapping) {
             $targetEntityMetadata = $allMetadata[$associationMapping['targetEntity']];
 
