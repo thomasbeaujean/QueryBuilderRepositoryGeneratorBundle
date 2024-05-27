@@ -2,9 +2,8 @@
 
 namespace Tbn\QueryBuilderRepositoryGeneratorBundle\Generator;
 
+use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\OneToManyAssociationMapping;
-use Tbn\QueryBuilderRepositoryGeneratorBundle\Configuration\Configurator;
 use Twig\Environment;
 
 class TemplateService
@@ -34,7 +33,7 @@ class TemplateService
     }
 
     public function renderAssociation(
-        OneToManyAssociationMapping $associationMapping,
+        AssociationMapping $associationMapping,
         string $entityDql,
         ClassMetadata $targetEntityMetadata,
         string $entityDqlTargeted,
