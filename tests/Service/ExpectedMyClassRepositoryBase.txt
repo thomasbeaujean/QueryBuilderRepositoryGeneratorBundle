@@ -130,8 +130,8 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function getDeleteQueryBuilder(): QueryBuilder
     {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->delete($this->_entityName, 'myClass');
+        $qb = $this->createQueryBuilder('myClass');
+        $qb->delete($this->getEntityName(), 'myClass');
 
         return $qb;
     }

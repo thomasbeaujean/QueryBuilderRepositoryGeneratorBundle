@@ -130,8 +130,8 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 
     public function getDeleteQueryBuilder(): QueryBuilder
     {
-        $qb = $this->_em->createQueryBuilder();
-        $qb->delete($this->_entityName, '{{ entityDql }}');
+        $qb = $this->createQueryBuilder('{{ entityDql }}');
+        $qb->delete($this->getEntityName(), '{{ entityDql }}');
 
         return $qb;
     }
