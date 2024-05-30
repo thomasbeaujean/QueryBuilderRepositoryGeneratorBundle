@@ -128,3 +128,13 @@
 
         return static::getQueryBuilderSingleResult($qb);
     }
+
+    public function deleteBy{{ column }}(
+        mixed $value,
+    ): void
+    {
+        $qb = $this->getDeleteQueryBuilder();
+        static::filterBy{{ column }}($qb, $value);
+
+        static::getQueryBuilderResult($qb);
+    }

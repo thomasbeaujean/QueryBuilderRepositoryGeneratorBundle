@@ -46,8 +46,13 @@ class RepositoryGeneratorTest extends KernelTestCase
         $service = $container->get('tbn_qbrg.generator.repository_generator');
         $service->generateFiles();
 
-        $expectedContent = \file_get_contents(__DIR__.'/ExpectedMyClassRepositoryBase.txt');
         $content = \file_get_contents(__DIR__.'/../Repository/MyClassRepositoryBase.php');
+
+        // keep for dev update
+        // \file_put_contents(__DIR__.'/ExpectedMyClassRepositoryBase.txt', $content);
+
+        $expectedContent = \file_get_contents(__DIR__.'/ExpectedMyClassRepositoryBase.txt');
+
         $this->assertSame($expectedContent, $content);
     }
 }
