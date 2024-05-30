@@ -255,6 +255,16 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         );
     }
 
+    public function deleteById(
+        mixed $value,
+    ): void
+    {
+        $qb = $this->getDeleteQueryBuilder();
+        static::filterById($qb, $value);
+
+        static::getQueryBuilderResult($qb);
+    }
+
     public static function filterByNumber(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'number'): QueryBuilder
     {
         if ($value === null) {
@@ -339,6 +349,16 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         );
     }
 
+    public function deleteByNumber(
+        mixed $value,
+    ): void
+    {
+        $qb = $this->getDeleteQueryBuilder();
+        static::filterByNumber($qb, $value);
+
+        static::getQueryBuilderResult($qb);
+    }
+
     public static function filterByName(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'name'): QueryBuilder
     {
         if ($value === null) {
@@ -421,6 +441,16 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return static::existsByQueryBuilder(
             qb: $qb,
         );
+    }
+
+    public function deleteByName(
+        mixed $value,
+    ): void
+    {
+        $qb = $this->getDeleteQueryBuilder();
+        static::filterByName($qb, $value);
+
+        static::getQueryBuilderResult($qb);
     }
 
     public static function filterByForeignClasses(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'foreignClasses'): QueryBuilder
@@ -546,5 +576,15 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         }
 
         return static::getQueryBuilderSingleResult($qb);
+    }
+
+    public function deleteByForeignClasses(
+        mixed $value,
+    ): void
+    {
+        $qb = $this->getDeleteQueryBuilder();
+        static::filterByForeignClasses($qb, $value);
+
+        static::getQueryBuilderResult($qb);
     }
 }
