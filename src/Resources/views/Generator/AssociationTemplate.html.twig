@@ -131,10 +131,18 @@
 
     public function deleteBy{{ column }}(
         mixed $value,
-    ): void
-    {
+    ): void {
         $qb = $this->getDeleteQueryBuilder();
         static::filterBy{{ column }}($qb, $value);
 
         static::getQueryBuilderResult($qb);
+    }
+
+    public function existsBy{{ column }}(
+        mixed $value,
+    ): bool {
+        $qb = $this->getNewQueryBuilder();
+        static::filterBy{{ column }}($qb, $value);
+
+        return static::existsByQueryBuilder($qb);
     }

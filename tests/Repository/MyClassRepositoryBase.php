@@ -580,11 +580,19 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function deleteByForeignClasses(
         mixed $value,
-    ): void
-    {
+    ): void {
         $qb = $this->getDeleteQueryBuilder();
         static::filterByForeignClasses($qb, $value);
 
         static::getQueryBuilderResult($qb);
+    }
+
+    public function existsByForeignClasses(
+        mixed $value,
+    ): bool {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByForeignClasses($qb, $value);
+
+        return static::existsByQueryBuilder($qb);
     }
 }
