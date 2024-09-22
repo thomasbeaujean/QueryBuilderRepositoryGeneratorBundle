@@ -556,6 +556,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
+    public static function leftJoinForeignClasses(QueryBuilder $qb, $entityName = 'myClass', $columnName = 'foreignClasses', $entityDqlTargeted = 'foreignClass'): QueryBuilder
+    {
+        $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
+
+        return $qb;
+    }
+
     public function findByForeignClasses(mixed $value): array
     {
         $qb = $this->getNewQueryBuilder();
