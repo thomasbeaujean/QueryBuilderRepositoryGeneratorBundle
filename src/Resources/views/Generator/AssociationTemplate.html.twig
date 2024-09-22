@@ -107,6 +107,13 @@
         return $qb;
     }
 
+    public static function leftJoin{{ column }}(QueryBuilder $qb, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}', $entityDqlTargeted = '{{ entityDqlTargeted }}'): QueryBuilder
+    {
+        $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
+
+        return $qb;
+    }
+
     public function findBy{{ column }}(mixed $value): array
     {
         $qb = $this->getNewQueryBuilder();
