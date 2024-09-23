@@ -1,6 +1,11 @@
 
-    public static function filterBy{{ column }}(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}'): QueryBuilder
-    {
+    public static function filterBy{{ column }}(
+        QueryBuilder $qb,
+        $value,
+        $operator = Comparison::EQ,
+        $entityName = '{{ entityDql }}',
+        $columnName = '{{ columnDql }}',
+    ): QueryBuilder {
         if ($value === null) {
             if (Comparison::NEQ === $operator) {
                 $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -19,8 +24,12 @@
         return $qb;
     }
 
-    public static function filterIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}'): QueryBuilder
-    {
+    public static function filterIn{{ column }}(
+        QueryBuilder $qb,
+        $value,
+        $entityName = '{{ entityDql }}',
+        $columnName = '{{ columnDql }}',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
@@ -34,8 +43,12 @@
         return $qb;
     }
 
-    public static function filterNotIn{{ column }}(QueryBuilder $qb, $value, $entityName = '{{ entityDql }}', $columnName = '{{ columnDql }}'): QueryBuilder
-    {
+    public static function filterNotIn{{ column }}(
+        QueryBuilder $qb,
+        $value,
+        $entityName = '{{ entityDql }}',
+        $columnName = '{{ columnDql }}',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
         } else {
@@ -50,36 +63,64 @@
         return $qb;
     }
 
-    public function findBy{{ column }}(mixed $value): array
-    {
+    public function findBy{{ column }}(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): array {
         $qb = $this->getNewQueryBuilder();
         static::filterBy{{ column }}($qb, $value);
 
-        return static::getQueryBuilderResult($qb);
+        return $this->getQueryBuilderResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function findOneBy{{ column }}(
         mixed $value,
         bool $allowNull = false,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): ?\{{ entityClasspath }} {
         $qb = $this->getNewQueryBuilder();
         static::filterBy{{ column }}($qb, $value);
 
         if ($allowNull) {
-            return static::getQueryBuilderOneOrNullResult($qb);
+            return $this->getQueryBuilderOneOrNullResult(
+                qb: $qb,
+                useQueryCache: $useQueryCache,
+                cacheId: $cacheId,
+                resultCacheTags: $resultCacheTags,
+            );
         }
 
-        return static::getQueryBuilderSingleResult($qb);
+        return $this->getQueryBuilderSingleResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function existsBy{{ column }}(
         mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
         static::filterBy{{ column }}($qb, $value);
 
         return static::existsByQueryBuilder(
             qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
         );
     }
 
