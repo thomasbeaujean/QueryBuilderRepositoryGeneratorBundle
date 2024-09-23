@@ -13,6 +13,8 @@ use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 /**
  * Generated class for filter query builders
@@ -22,8 +24,11 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 {
     protected static $parameterIndex = 0;
 
-    public function __construct(ManagerRegistry $registry, string $entity = \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass::class)
-    {
+    public function __construct(
+        protected CacheInterface $appCache,
+        ManagerRegistry $registry,
+        string $entity = \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass::class,
+    ) {
         parent::__construct($registry, $entity);
     }
 
@@ -42,72 +47,173 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $this->createQueryBuilder('myClass');
     }
 
-    public static function getQueryBuilderResult(QueryBuilder $qb, $useQueryCache = false)
-    {
+    private function getCachedResult(
+        QueryBuilder $qb,
+        string $methodName,
+        string|int|null $hydrationMode = null,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): mixed {
         $query = $qb->getQuery();
-        $query->useQueryCache($useQueryCache);
 
-        return $query->getResult();
+        if (!method_exists($query, $methodName)) {
+            throw new \Exception("The methode $methodName of QueryBuilder does not exist");
+        }
+
+        if (!$useQueryCache) {
+            if ($hydrationMode) {
+                return $query->$methodName($hydrationMode);
+            }
+            return $query->$methodName();
+        }
+
+        if (null === $cacheId) {
+            throw new \Exception('The cacheId must be provided to use useQueryCache');
+        }
+
+        return $this->appCache->get($cacheId, function (ItemInterface $item) use ($query, $methodName, $hydrationMode, $resultCacheTags): mixed {
+            foreach ($resultCacheTags as $cacheTag) {
+                $item->tag($cacheTag);
+            }
+
+            if ($hydrationMode) {
+                return $query->$methodName($hydrationMode);
+            }
+            return $query->$methodName();
+        });
     }
 
-    public static function getQueryBuilderSingleResult(QueryBuilder $qb, $useQueryCache = false)
-    {
-        $query = $qb->getQuery();
-        $query->useQueryCache($useQueryCache);
-
-        return $query->getSingleResult();
+    public function getQueryBuilderResult(
+        QueryBuilder $qb,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ) {
+        return $this->getCachedResult(
+            qb: $qb,
+            methodName: 'getResult',
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
-    public static function getQueryBuilderOneOrNullResult(QueryBuilder $qb, $useQueryCache = false)
-    {
-        $query = $qb->getQuery();
-        $query->useQueryCache($useQueryCache);
-
-        return $query->getOneOrNullResult();
+    public function getQueryBuilderSingleResult(
+        QueryBuilder $qb,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ) {
+        return $this->getCachedResult(
+            qb: $qb,
+            methodName: 'getSingleResult',
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
-    public static function getQueryBuilderArrayResult(QueryBuilder $qb, $useQueryCache = false)
-    {
-        $query = $qb->getQuery();
-        $query->useQueryCache($useQueryCache);
-
-        return $query->getArrayResult();
+    public function getQueryBuilderOneOrNullResult(
+        QueryBuilder $qb,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ) {
+        return $this->getCachedResult(
+            qb: $qb,
+            methodName: 'getOneOrNullResult',
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
-    public static function getQueryBuilderSingleArrayResult(QueryBuilder $qb, $useQueryCache = false)
-    {
-        $query = $qb->getQuery();
-        $query->useQueryCache($useQueryCache);
-
-        return $query->getSingleResult(Query::HYDRATE_ARRAY);
+    public function getQueryBuilderArrayResult(
+        QueryBuilder $qb,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ) {
+        return $this->getCachedResult(
+            qb: $qb,
+            methodName: 'getArrayResult',
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
-    public static function getQueryBuilderScalarResult(QueryBuilder $qb, $useQueryCache = false)
-    {
-        $query = $qb->getQuery();
-        $query->useQueryCache($useQueryCache);
-
-        return $query->getScalarResult();
+    public function getQueryBuilderSingleArrayResult(
+        QueryBuilder $qb,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ) {
+        return $this->getCachedResult(
+            qb: $qb,
+            methodName: 'getSingleResult',
+            hydrationMode: Query::HYDRATE_ARRAY,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
-    public static function getQueryBuilderSingleScalarResult(QueryBuilder $qb, $useQueryCache = false)
-    {
-        $query = $qb->getQuery();
-        $query->useQueryCache($useQueryCache);
-
-        return $query->getSingleScalarResult();
+    public function getQueryBuilderScalarResult(
+        QueryBuilder $qb,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ) {
+        return $this->getCachedResult(
+            qb: $qb,
+            methodName: 'getScalarResult',
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
-    public static function getQueryBuilderCount(QueryBuilder $qb, $entityName = 'myClass'): int
-    {
+    public function getQueryBuilderSingleScalarResult(
+        QueryBuilder $qb,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ) {
+        return $this->getCachedResult(
+            qb: $qb,
+            methodName: 'getSingleScalarResult',
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
+    }
+
+    public function getQueryBuilderCount(
+        QueryBuilder $qb,
+        $entityName = 'myClass',
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): int {
         $qb->select('count('.$entityName.') as total');
-        $total = self::getQueryBuilderSingleArrayResult($qb);
+        $total = $this->getQueryBuilderSingleArrayResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
 
         return $total['total'];
     }
 
-    public function exists($entity): bool
-    {
+    public function exists(
+        $entity,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): bool {
         if (null === $entity) {
             throw new \LogicException('The entity parameter must be provided, it can not be null');
         }
@@ -118,7 +224,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         $entityId = $entity->getId();
         static::filterById($qb, $entityId);
 
-        $result = static::getQueryBuilderOneOrNullResult($qb);
+        $result = static::getQueryBuilderOneOrNullResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
 
         if (null !==  $result) {
             //the entity was found
@@ -128,20 +239,30 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $exists;
     }
 
-    public function getDeleteQueryBuilder(): QueryBuilder
-    {
+    public function getDeleteQueryBuilder(
+    ): QueryBuilder {
         $qb = $this->createQueryBuilder('myClass');
         $qb->delete($this->getEntityName(), 'myClass');
 
         return $qb;
     }
 
-    public static function existsByQueryBuilder(QueryBuilder $qb, $columnName = 'id', $useQueryCache = false): bool
-    {
+    public function existsByQueryBuilder(
+        QueryBuilder $qb,
+        string $columnName = 'id',
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): bool {
         $exists = false;
         $qb->select($qb->expr()->count('myClass.'.$columnName));
 
-        $count = static::getQueryBuilderSingleScalarResult($qb, $useQueryCache);
+        $count = $this->getQueryBuilderSingleScalarResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
 
         if ($count > 0) {
             $exists = true;
@@ -150,8 +271,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $exists;
     }
 
-    public function findOne($id): \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass
-    {
+    public function findOne(
+        $id,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         // try to extract the value from an enum
         if (is_object($id)) {
             $ref = new \ReflectionClass($id);
@@ -163,7 +288,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         static::filterById($qb, $id);
 
         try {
-            $entity = static::getQueryBuilderSingleResult($qb);
+            $entity = static::getQueryBuilderSingleResult(
+                qb: $qb,
+                useQueryCache: $useQueryCache,
+                cacheId: $cacheId,
+                resultCacheTags: $resultCacheTags,
+            );
         } catch (EntityNotFoundException|NoResultException $ex) {
             throw EntityNotFoundException::fromClassNameAndIdentifier(\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass::class, [$id]);
         }
@@ -171,8 +301,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $entity;
     }
 
-    public static function filterById(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'id'): QueryBuilder
-    {
+    public static function filterById(
+        QueryBuilder $qb,
+        $value,
+        $operator = Comparison::EQ,
+        $entityName = 'myClass',
+        $columnName = 'id',
+    ): QueryBuilder {
         if ($value === null) {
             if (Comparison::NEQ === $operator) {
                 $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -191,8 +326,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterInId(QueryBuilder $qb, $value, $entityName = 'myClass', $columnName = 'id'): QueryBuilder
-    {
+    public static function filterInId(
+        QueryBuilder $qb,
+        $value,
+        $entityName = 'myClass',
+        $columnName = 'id',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
@@ -206,8 +345,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterNotInId(QueryBuilder $qb, $value, $entityName = 'myClass', $columnName = 'id'): QueryBuilder
-    {
+    public static function filterNotInId(
+        QueryBuilder $qb,
+        $value,
+        $entityName = 'myClass',
+        $columnName = 'id',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
         } else {
@@ -222,36 +365,64 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public function findById(mixed $value): array
-    {
+    public function findById(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): array {
         $qb = $this->getNewQueryBuilder();
         static::filterById($qb, $value);
 
-        return static::getQueryBuilderResult($qb);
+        return $this->getQueryBuilderResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function findOneById(
         mixed $value,
         bool $allowNull = false,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         $qb = $this->getNewQueryBuilder();
         static::filterById($qb, $value);
 
         if ($allowNull) {
-            return static::getQueryBuilderOneOrNullResult($qb);
+            return $this->getQueryBuilderOneOrNullResult(
+                qb: $qb,
+                useQueryCache: $useQueryCache,
+                cacheId: $cacheId,
+                resultCacheTags: $resultCacheTags,
+            );
         }
 
-        return static::getQueryBuilderSingleResult($qb);
+        return $this->getQueryBuilderSingleResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function existsById(
         mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
         static::filterById($qb, $value);
 
         return static::existsByQueryBuilder(
             qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
         );
     }
 
@@ -265,8 +436,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         static::getQueryBuilderResult($qb);
     }
 
-    public static function filterByNumber(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'number'): QueryBuilder
-    {
+    public static function filterByNumber(
+        QueryBuilder $qb,
+        $value,
+        $operator = Comparison::EQ,
+        $entityName = 'myClass',
+        $columnName = 'number',
+    ): QueryBuilder {
         if ($value === null) {
             if (Comparison::NEQ === $operator) {
                 $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -285,8 +461,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterInNumber(QueryBuilder $qb, $value, $entityName = 'myClass', $columnName = 'number'): QueryBuilder
-    {
+    public static function filterInNumber(
+        QueryBuilder $qb,
+        $value,
+        $entityName = 'myClass',
+        $columnName = 'number',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
@@ -300,8 +480,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterNotInNumber(QueryBuilder $qb, $value, $entityName = 'myClass', $columnName = 'number'): QueryBuilder
-    {
+    public static function filterNotInNumber(
+        QueryBuilder $qb,
+        $value,
+        $entityName = 'myClass',
+        $columnName = 'number',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
         } else {
@@ -316,36 +500,64 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public function findByNumber(mixed $value): array
-    {
+    public function findByNumber(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): array {
         $qb = $this->getNewQueryBuilder();
         static::filterByNumber($qb, $value);
 
-        return static::getQueryBuilderResult($qb);
+        return $this->getQueryBuilderResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function findOneByNumber(
         mixed $value,
         bool $allowNull = false,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         $qb = $this->getNewQueryBuilder();
         static::filterByNumber($qb, $value);
 
         if ($allowNull) {
-            return static::getQueryBuilderOneOrNullResult($qb);
+            return $this->getQueryBuilderOneOrNullResult(
+                qb: $qb,
+                useQueryCache: $useQueryCache,
+                cacheId: $cacheId,
+                resultCacheTags: $resultCacheTags,
+            );
         }
 
-        return static::getQueryBuilderSingleResult($qb);
+        return $this->getQueryBuilderSingleResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function existsByNumber(
         mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
         static::filterByNumber($qb, $value);
 
         return static::existsByQueryBuilder(
             qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
         );
     }
 
@@ -359,8 +571,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         static::getQueryBuilderResult($qb);
     }
 
-    public static function filterByName(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'name'): QueryBuilder
-    {
+    public static function filterByName(
+        QueryBuilder $qb,
+        $value,
+        $operator = Comparison::EQ,
+        $entityName = 'myClass',
+        $columnName = 'name',
+    ): QueryBuilder {
         if ($value === null) {
             if (Comparison::NEQ === $operator) {
                 $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -379,8 +596,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterInName(QueryBuilder $qb, $value, $entityName = 'myClass', $columnName = 'name'): QueryBuilder
-    {
+    public static function filterInName(
+        QueryBuilder $qb,
+        $value,
+        $entityName = 'myClass',
+        $columnName = 'name',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
         } else {
@@ -394,8 +615,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterNotInName(QueryBuilder $qb, $value, $entityName = 'myClass', $columnName = 'name'): QueryBuilder
-    {
+    public static function filterNotInName(
+        QueryBuilder $qb,
+        $value,
+        $entityName = 'myClass',
+        $columnName = 'name',
+    ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
         } else {
@@ -410,36 +635,64 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public function findByName(mixed $value): array
-    {
+    public function findByName(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): array {
         $qb = $this->getNewQueryBuilder();
         static::filterByName($qb, $value);
 
-        return static::getQueryBuilderResult($qb);
+        return $this->getQueryBuilderResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function findOneByName(
         mixed $value,
         bool $allowNull = false,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         $qb = $this->getNewQueryBuilder();
         static::filterByName($qb, $value);
 
         if ($allowNull) {
-            return static::getQueryBuilderOneOrNullResult($qb);
+            return $this->getQueryBuilderOneOrNullResult(
+                qb: $qb,
+                useQueryCache: $useQueryCache,
+                cacheId: $cacheId,
+                resultCacheTags: $resultCacheTags,
+            );
         }
 
-        return static::getQueryBuilderSingleResult($qb);
+        return $this->getQueryBuilderSingleResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function existsByName(
         mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
         static::filterByName($qb, $value);
 
         return static::existsByQueryBuilder(
             qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
         );
     }
 
@@ -453,8 +706,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         static::getQueryBuilderResult($qb);
     }
 
-    public static function filterByForeignClasses(QueryBuilder $qb, $value, $operator = Comparison::EQ, $entityName = 'myClass', $columnName = 'foreignClasses'): QueryBuilder
-    {
+    public static function filterByForeignClasses(
+        QueryBuilder $qb,
+        $value,
+        $operator = Comparison::EQ,
+        $entityName = 'myClass',
+        $columnName = 'foreignClasses',
+    ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
@@ -490,8 +748,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterInForeignClasses(QueryBuilder $qb, $values, $entityName = 'myClass', $columnName = 'foreignClasses'): QueryBuilder
-    {
+    public static function filterInForeignClasses(
+        QueryBuilder $qb,
+        $values,
+        $entityName = 'myClass',
+        $columnName = 'foreignClasses',
+    ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
@@ -526,8 +788,12 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function filterNotInForeignClasses(QueryBuilder $qb, $values, $entityName = 'myClass', $columnName = 'foreignClasses'): QueryBuilder
-    {
+    public static function filterNotInForeignClasses(
+        QueryBuilder $qb,
+        $values,
+        $entityName = 'myClass',
+        $columnName = 'foreignClasses',
+    ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
         $parameterName = $columnName.$index;
@@ -549,40 +815,70 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
-    public static function joinForeignClasses(QueryBuilder $qb, $entityName = 'myClass', $columnName = 'foreignClasses', $entityDqlTargeted = 'foreignClass'): QueryBuilder
-    {
+    public static function joinForeignClasses(
+        QueryBuilder $qb,
+        $entityName = 'myClass',
+        $columnName = 'foreignClasses',
+        $entityDqlTargeted = 'foreignClass',
+    ): QueryBuilder {
         $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
 
         return $qb;
     }
 
-    public static function leftJoinForeignClasses(QueryBuilder $qb, $entityName = 'myClass', $columnName = 'foreignClasses', $entityDqlTargeted = 'foreignClass'): QueryBuilder
-    {
+    public static function leftJoinForeignClasses(
+        QueryBuilder $qb,
+        $entityName = 'myClass',
+        $columnName = 'foreignClasses',
+        $entityDqlTargeted = 'foreignClass',
+    ): QueryBuilder {
         $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
 
         return $qb;
     }
 
-    public function findByForeignClasses(mixed $value): array
-    {
+    public function findByForeignClasses(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): array {
         $qb = $this->getNewQueryBuilder();
         static::filterByForeignClasses($qb, $value);
 
-        return static::getQueryBuilderResult($qb);
+        return $this->getQueryBuilderResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function findOneByForeignClasses(
         mixed $value,
         bool $allowNull = false,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         $qb = $this->getNewQueryBuilder();
         static::filterByForeignClasses($qb, $value);
 
         if ($allowNull) {
-            return static::getQueryBuilderOneOrNullResult($qb);
+            return $this->getQueryBuilderOneOrNullResult(
+                qb: $qb,
+                useQueryCache: $useQueryCache,
+                cacheId: $cacheId,
+                resultCacheTags: $resultCacheTags,
+            );
         }
 
-        return static::getQueryBuilderSingleResult($qb);
+        return $this->getQueryBuilderSingleResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 
     public function deleteByForeignClasses(
@@ -596,10 +892,18 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function existsByForeignClasses(
         mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
         static::filterByForeignClasses($qb, $value);
 
-        return static::existsByQueryBuilder($qb);
+        return static::existsByQueryBuilder(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
     }
 }
