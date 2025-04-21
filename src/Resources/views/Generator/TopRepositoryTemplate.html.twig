@@ -85,6 +85,9 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         });
     }
 
+    /**
+     * @return \{{rootEntityName}}[]
+     */
     public function getQueryBuilderResult(
         QueryBuilder $qb,
         bool $useQueryCache = false,
@@ -100,6 +103,9 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         );
     }
 
+    /**
+     * @return \{{rootEntityName}}
+     */
     public function getQueryBuilderSingleResult(
         QueryBuilder $qb,
         bool $useQueryCache = false,
@@ -115,6 +121,9 @@ class {{ entityClassname }}Base extends {{ extendClass }}
         );
     }
 
+    /**
+     * @return ?\{{rootEntityName}}
+     */
     public function getQueryBuilderOneOrNullResult(
         QueryBuilder $qb,
         bool $useQueryCache = false,

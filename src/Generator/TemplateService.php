@@ -25,6 +25,7 @@ class TemplateService
         ?string $bundleName,
         string $entityDql,
         $idType,
+        $rootEntityName,
     ): string {
         $topClassparameter = array(
             'namespace' => $namespace,
@@ -34,6 +35,7 @@ class TemplateService
             'bundleName' => $bundleName,
             'entityDql' => $entityDql,
             'idType' => $idType,
+            'rootEntityName' => $rootEntityName,
         );
 
         return $this->twig->render($this->topRepositoryTemple, $topClassparameter);
