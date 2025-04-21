@@ -3,7 +3,7 @@
         QueryBuilder $qb,
         $value,
         $operator = Comparison::EQ,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         //get a uniq index
@@ -49,7 +49,7 @@
     public static function filterIn{{ column }}(
         QueryBuilder $qb,
         $values,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         //get a uniq index
@@ -89,7 +89,7 @@
     public static function filterNotIn{{ column }}(
         QueryBuilder $qb,
         $values,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         //get a uniq index
@@ -115,7 +115,7 @@
 
     public static function join{{ column }}(
         QueryBuilder $qb,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
         $entityDqlTargeted = '{{ entityDqlTargeted }}',
     ): QueryBuilder {
@@ -126,7 +126,7 @@
 
     public static function leftJoin{{ column }}(
         QueryBuilder $qb,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
         $entityDqlTargeted = '{{ entityDqlTargeted }}',
     ): QueryBuilder {

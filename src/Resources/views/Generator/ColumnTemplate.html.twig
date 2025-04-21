@@ -3,7 +3,7 @@
         QueryBuilder $qb,
         $value,
         $operator = Comparison::EQ,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         if ($value === null) {
@@ -27,7 +27,7 @@
     public static function filterIn{{ column }}(
         QueryBuilder $qb,
         $value,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         if ($value === null) {
@@ -46,7 +46,7 @@
     public static function filterNotIn{{ column }}(
         QueryBuilder $qb,
         $value,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         if ($value === null) {
