@@ -85,6 +85,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         });
     }
 
+    /**
+     * @return \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass[]
+     */
     public function getQueryBuilderResult(
         QueryBuilder $qb,
         bool $useQueryCache = false,
@@ -100,6 +103,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         );
     }
 
+    /**
+     * @return \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass
+     */
     public function getQueryBuilderSingleResult(
         QueryBuilder $qb,
         bool $useQueryCache = false,
@@ -115,6 +121,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         );
     }
 
+    /**
+     * @return ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass
+     */
     public function getQueryBuilderOneOrNullResult(
         QueryBuilder $qb,
         bool $useQueryCache = false,

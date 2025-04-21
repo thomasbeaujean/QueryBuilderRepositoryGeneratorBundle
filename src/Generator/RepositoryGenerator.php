@@ -59,6 +59,8 @@ class RepositoryGenerator
         $associationMappings = $meta->associationMappings;
         $customRepositoryClassName = $meta->customRepositoryClassName;
 
+        $rootEntityName = $meta->rootEntityName;
+
         $pathParts = explode('\\', $customRepositoryClassName);
         $entityClassname = end($pathParts);
 
@@ -80,6 +82,7 @@ class RepositoryGenerator
             $bundleName,
             $entityDql,
             $idType,
+            $rootEntityName,
         );
 
         //parse the columns
