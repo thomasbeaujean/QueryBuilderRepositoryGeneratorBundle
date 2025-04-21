@@ -22,6 +22,7 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class {{ entityClassname }}Base extends {{ extendClass }}
 {
+    const NAME = '{{ entityDql }}';
     protected static $parameterIndex = 0;
 
     public function __construct(
@@ -34,17 +35,17 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 
     public static function getName(): string
     {
-        return '{{ entityDql }}';
+        return self::NAME;
     }
 
     public static function getParameterIndex(): string
     {
-        return '{{ entityDql }}'.static::$parameterIndex++;
+        return self::NAME.static::$parameterIndex++;
     }
 
     public function getNewQueryBuilder(): QueryBuilder
     {
-        return $this->createQueryBuilder('{{ entityDql }}');
+        return $this->createQueryBuilder(self::NAME);
     }
 
     private function getCachedResult(
@@ -192,7 +193,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 
     public function getQueryBuilderCount(
         QueryBuilder $qb,
-        $entityName = '{{ entityDql }}',
+        $entityName = self::NAME,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -241,8 +242,8 @@ class {{ entityClassname }}Base extends {{ extendClass }}
 
     public function getDeleteQueryBuilder(
     ): QueryBuilder {
-        $qb = $this->createQueryBuilder('{{ entityDql }}');
-        $qb->delete($this->getEntityName(), '{{ entityDql }}');
+        $qb = $this->createQueryBuilder(self::NAME);
+        $qb->delete($this->getEntityName(), self::NAME);
 
         return $qb;
     }

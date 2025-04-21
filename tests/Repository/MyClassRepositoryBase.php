@@ -22,6 +22,7 @@ use Symfony\Contracts\Cache\ItemInterface;
  */
 class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository
 {
+    const NAME = 'myClass';
     protected static $parameterIndex = 0;
 
     public function __construct(
@@ -34,17 +35,17 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function getName(): string
     {
-        return 'myClass';
+        return self::NAME;
     }
 
     public static function getParameterIndex(): string
     {
-        return 'myClass'.static::$parameterIndex++;
+        return self::NAME.static::$parameterIndex++;
     }
 
     public function getNewQueryBuilder(): QueryBuilder
     {
-        return $this->createQueryBuilder('myClass');
+        return $this->createQueryBuilder(self::NAME);
     }
 
     private function getCachedResult(
@@ -192,7 +193,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function getQueryBuilderCount(
         QueryBuilder $qb,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -241,8 +242,8 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function getDeleteQueryBuilder(
     ): QueryBuilder {
-        $qb = $this->createQueryBuilder('myClass');
-        $qb->delete($this->getEntityName(), 'myClass');
+        $qb = $this->createQueryBuilder(self::NAME);
+        $qb->delete($this->getEntityName(), self::NAME);
 
         return $qb;
     }
@@ -305,7 +306,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         QueryBuilder $qb,
         $value,
         $operator = Comparison::EQ,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'id',
     ): QueryBuilder {
         if ($value === null) {
@@ -329,7 +330,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterInId(
         QueryBuilder $qb,
         $value,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'id',
     ): QueryBuilder {
         if ($value === null) {
@@ -348,7 +349,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterNotInId(
         QueryBuilder $qb,
         $value,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'id',
     ): QueryBuilder {
         if ($value === null) {
@@ -440,7 +441,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         QueryBuilder $qb,
         $value,
         $operator = Comparison::EQ,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'number',
     ): QueryBuilder {
         if ($value === null) {
@@ -464,7 +465,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterInNumber(
         QueryBuilder $qb,
         $value,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'number',
     ): QueryBuilder {
         if ($value === null) {
@@ -483,7 +484,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterNotInNumber(
         QueryBuilder $qb,
         $value,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'number',
     ): QueryBuilder {
         if ($value === null) {
@@ -575,7 +576,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         QueryBuilder $qb,
         $value,
         $operator = Comparison::EQ,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'name',
     ): QueryBuilder {
         if ($value === null) {
@@ -599,7 +600,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterInName(
         QueryBuilder $qb,
         $value,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'name',
     ): QueryBuilder {
         if ($value === null) {
@@ -618,7 +619,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterNotInName(
         QueryBuilder $qb,
         $value,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'name',
     ): QueryBuilder {
         if ($value === null) {
@@ -710,7 +711,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         QueryBuilder $qb,
         $value,
         $operator = Comparison::EQ,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'foreignClasses',
     ): QueryBuilder {
         //get a uniq index
@@ -751,7 +752,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterInForeignClasses(
         QueryBuilder $qb,
         $values,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'foreignClasses',
     ): QueryBuilder {
         //get a uniq index
@@ -791,7 +792,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterNotInForeignClasses(
         QueryBuilder $qb,
         $values,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'foreignClasses',
     ): QueryBuilder {
         //get a uniq index
@@ -817,7 +818,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function joinForeignClasses(
         QueryBuilder $qb,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'foreignClasses',
         $entityDqlTargeted = 'foreignClass',
     ): QueryBuilder {
@@ -828,7 +829,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function leftJoinForeignClasses(
         QueryBuilder $qb,
-        $entityName = 'myClass',
+        $entityName = self::NAME,
         $columnName = 'foreignClasses',
         $entityDqlTargeted = 'foreignClass',
     ): QueryBuilder {
