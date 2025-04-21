@@ -17,8 +17,15 @@ class TemplateService
     ) {
     }
 
-    public function renderTopClass(string $extendClass, string $namespace, string $entityClasspath, string $entityClassname, ?string $bundleName, string $entityDql, $idType): string
-    {
+    public function renderTopClass(
+        string $extendClass,
+        string $namespace,
+        string $entityClasspath,
+        string $entityClassname,
+        ?string $bundleName,
+        string $entityDql,
+        $idType,
+    ): string {
         $topClassparameter = array(
             'namespace' => $namespace,
             'entityClasspath' => $entityClasspath,
