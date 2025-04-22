@@ -311,6 +311,26 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $entity;
     }
 
+    public static function filterBy(
+        QueryBuilder $qb,
+        string $columnName,
+        string $operator,
+        string $value,
+        ?string $entityName = null,
+    ): QueryBuilder {
+        if (null === $entityName) {
+            $entityName = self::NAME;
+        }
+
+        $index = static::getParameterIndex();
+        $parameterName = $columnName.$index;
+
+        $qb->andWhere($entityName.'.'.$columnName.' '.$operator.' :'.$parameterName);
+        $qb->setParameter($parameterName, $value);
+
+        return $qb;
+    }
+
     public static function filterById(
         QueryBuilder $qb,
         $value,
