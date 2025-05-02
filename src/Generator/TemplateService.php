@@ -19,6 +19,7 @@ class TemplateService
 
     public function renderTopClass(
         string $extendClass,
+        bool $isExtendedClass,
         string $namespace,
         string $entityClasspath,
         string $entityClassname,
@@ -32,6 +33,7 @@ class TemplateService
             'entityClasspath' => $entityClasspath,
             'entityClassname' => $entityClassname,
             'extendClass' => $extendClass,
+            'isExtendedClass' => $isExtendedClass,
             'bundleName' => $bundleName,
             'entityDql' => $entityDql,
             'idType' => $idType,

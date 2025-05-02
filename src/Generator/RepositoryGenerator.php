@@ -74,8 +74,11 @@ class RepositoryGenerator
             $idType = $idField['type'];
         }
         $extendClass = $this->configurator->getExtendRepository($entityClasspath);
+        $isExtendedClass = $this->configurator->isExtendeRepository($extendClass);
+
         $renderedTemplate = $this->templateService->renderTopClass(
             $extendClass,
+            $isExtendedClass,
             $entityNamespace,
             $entityClasspath,
             $entityClassname,
