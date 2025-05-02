@@ -36,4 +36,10 @@ class Configurator
 
         return $extendRepository;
     }
+
+    public function isExtendeRepository(
+        string $repository,
+    ): bool {
+        return static::DEFAULT_REPOSITORY_EXTEND !== $repository;
+    }
 }

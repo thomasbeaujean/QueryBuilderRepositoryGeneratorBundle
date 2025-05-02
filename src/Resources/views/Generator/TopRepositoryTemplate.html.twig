@@ -32,7 +32,11 @@ class {{ entityClassname }}Base extends {{ extendClass }} implements FilterByInt
         ManagerRegistry $registry,
         string $entity = \{{ entityClasspath }}::class,
     ) {
+{% if isExtendedClass %}
+        parent::__construct($appCache, $registry, $entity);
+{% else %}
         parent::__construct($registry, $entity);
+{% endif %}
     }
 
     public static function getName(): string
