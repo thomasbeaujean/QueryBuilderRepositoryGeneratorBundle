@@ -37,6 +37,7 @@ class QueryBuilderRepositoryGeneratorExtension extends Extension
 
         $container->setParameter('tbn_qbrg.generator.template.entity_configuration', $entityConfiguration);
         $container->setParameter('tbn_qbrg.generator.template.repository_extension', $repositoryExtensions);
+        $container->setParameter('tbn_qbrg.generator.template.use_interfaces', $config['use_interfaces']);
 
         //the templates
         $container->setParameter('tbn_qbrg.generator.template.top_repository', $config['templates']['top_repository']);

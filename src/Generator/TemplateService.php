@@ -9,6 +9,7 @@ use Twig\Environment;
 class TemplateService
 {
     public function __construct(
+        private bool $useInterfaces,
         private $topRepositoryTemple,
         private $columnTemplate,
         private $bottomRepositoryTemplate,
@@ -30,6 +31,7 @@ class TemplateService
     ): string {
         $topClassparameter = array(
             'namespace' => $namespace,
+            'useInterfaces' => $this->useInterfaces,
             'entityClasspath' => $entityClasspath,
             'entityClassname' => $entityClassname,
             'extendClass' => $extendClass,
