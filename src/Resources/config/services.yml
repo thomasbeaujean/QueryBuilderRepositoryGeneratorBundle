@@ -18,6 +18,7 @@ services:
     Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService:
         class: Tbn\QueryBuilderRepositoryGeneratorBundle\Generator\TemplateService
         arguments:
+            - "%tbn_qbrg.generator.template.use_interfaces%"
             - "%tbn_qbrg.generator.template.top_repository%"
             - "%tbn_qbrg.generator.template.column%"
             - "%tbn_qbrg.generator.template.bottom_repository%"

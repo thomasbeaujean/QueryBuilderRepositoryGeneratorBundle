@@ -15,15 +15,12 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
-use Tbn\QueryBuilderRepositoryGeneratorBundle\Interface\FilterByInterface;
-use Tbn\QueryBuilderRepositoryGeneratorBundle\Interface\FilterInInterface;
 
 /**
  * Generated class for filter query builders
  *
  */
-class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository implements FilterByInterface, FilterInInterface
-{
+class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository{
     const NAME = 'myClass';
     protected static $parameterIndex = 0;
 

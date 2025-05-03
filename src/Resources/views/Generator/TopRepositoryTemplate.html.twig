@@ -15,14 +15,16 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+{% if useInterfaces %}
 use Tbn\QueryBuilderRepositoryGeneratorBundle\Interface\FilterByInterface;
 use Tbn\QueryBuilderRepositoryGeneratorBundle\Interface\FilterInInterface;
+{% endif %}
 
 /**
  * Generated class for filter query builders
  *
  */
-class {{ entityClassname }}Base extends {{ extendClass }} implements FilterByInterface, FilterInInterface
+class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} implements FilterByInterface, FilterInInterface{% endif %}
 {
     const NAME = '{{ entityDql }}';
     protected static $parameterIndex = 0;
