@@ -225,6 +225,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
 
         return $total['total'];
     }
+{% if idType %}
 
     public function exists(
         $entity,
@@ -256,6 +257,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
 
         return $exists;
     }
+{% endif %}
 
     public function getDeleteQueryBuilder(
     ): QueryBuilder {
@@ -288,6 +290,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
 
         return $exists;
     }
+{% if idType %}
 
     public function findOne(
         $id,
@@ -323,6 +326,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
 
         return $entity;
     }
+{% endif %}
 
     public static function filterBy(
         QueryBuilder $qb,

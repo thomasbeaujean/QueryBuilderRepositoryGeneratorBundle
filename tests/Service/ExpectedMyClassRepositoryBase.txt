@@ -754,6 +754,27 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
         static::getQueryBuilderResult($qb);
     }
+    public static function joinForeignClasses(
+        QueryBuilder $qb,
+        $entityName = self::NAME,
+        $columnName = 'foreignClasses',
+        $entityDqlTargeted = 'foreignClass',
+    ): QueryBuilder {
+        $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
+
+        return $qb;
+    }
+
+    public static function leftJoinForeignClasses(
+        QueryBuilder $qb,
+        $entityName = self::NAME,
+        $columnName = 'foreignClasses',
+        $entityDqlTargeted = 'foreignClass',
+    ): QueryBuilder {
+        $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
+
+        return $qb;
+    }
 
     public static function filterByForeignClasses(
         QueryBuilder $qb,
@@ -860,28 +881,6 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
             $qb->andWhere($entityName.'.'.$columnName.' NOT IN (:'.$parameterName.')');
             $qb->setParameter($parameterName, $ids);
         }
-
-        return $qb;
-    }
-
-    public static function joinForeignClasses(
-        QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = 'foreignClasses',
-        $entityDqlTargeted = 'foreignClass',
-    ): QueryBuilder {
-        $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
-
-        return $qb;
-    }
-
-    public static function leftJoinForeignClasses(
-        QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = 'foreignClasses',
-        $entityDqlTargeted = 'foreignClass',
-    ): QueryBuilder {
-        $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
 
         return $qb;
     }

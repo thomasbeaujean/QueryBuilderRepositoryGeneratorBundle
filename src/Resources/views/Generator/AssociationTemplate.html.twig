@@ -1,4 +1,26 @@
+    public static function join{{ column }}(
+        QueryBuilder $qb,
+        $entityName = self::NAME,
+        $columnName = '{{ columnDql }}',
+        $entityDqlTargeted = '{{ entityDqlTargeted }}',
+    ): QueryBuilder {
+        $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
 
+        return $qb;
+    }
+
+    public static function leftJoin{{ column }}(
+        QueryBuilder $qb,
+        $entityName = self::NAME,
+        $columnName = '{{ columnDql }}',
+        $entityDqlTargeted = '{{ entityDqlTargeted }}',
+    ): QueryBuilder {
+        $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
+
+        return $qb;
+    }
+
+{% if idType %}
     public static function filterBy{{ column }}(
         QueryBuilder $qb,
         $value,
@@ -113,28 +135,6 @@
         return $qb;
     }
 
-    public static function join{{ column }}(
-        QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
-        $entityDqlTargeted = '{{ entityDqlTargeted }}',
-    ): QueryBuilder {
-        $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
-
-        return $qb;
-    }
-
-    public static function leftJoin{{ column }}(
-        QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
-        $entityDqlTargeted = '{{ entityDqlTargeted }}',
-    ): QueryBuilder {
-        $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
-
-        return $qb;
-    }
-
     public function findBy{{ column }}(
         mixed $value,
         bool $useQueryCache = false,
@@ -204,3 +204,4 @@
             resultCacheTags: $resultCacheTags,
         );
     }
+{% endif %}
