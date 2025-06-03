@@ -458,6 +458,23 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         );
     }
 
+    public function countById(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): int {
+        $qb = $this->getNewQueryBuilder();
+        static::filterById($qb, $value);
+
+        return static::getQueryBuilderCount(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
+    }
+
     public function existsById(
         mixed $value,
         bool $useQueryCache = false,
@@ -593,6 +610,23 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         );
     }
 
+    public function countByNumber(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): int {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByNumber($qb, $value);
+
+        return static::getQueryBuilderCount(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
+    }
+
     public function existsByNumber(
         mixed $value,
         bool $useQueryCache = false,
@@ -721,6 +755,23 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         }
 
         return $this->getQueryBuilderSingleResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
+    }
+
+    public function countByName(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): int {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByName($qb, $value);
+
+        return static::getQueryBuilderCount(
             qb: $qb,
             useQueryCache: $useQueryCache,
             cacheId: $cacheId,
@@ -922,6 +973,23 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         }
 
         return $this->getQueryBuilderSingleResult(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
+    }
+
+    public function countByForeignClasses(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): int {
+        $qb = $this->getNewQueryBuilder();
+        static::filterByForeignClasses($qb, $value);
+
+        return static::getQueryBuilderCount(
             qb: $qb,
             useQueryCache: $useQueryCache,
             cacheId: $cacheId,
