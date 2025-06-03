@@ -179,6 +179,23 @@
         );
     }
 
+    public function countBy{{ column }}(
+        mixed $value,
+        bool $useQueryCache = false,
+        ?string $cacheId = null,
+        array $resultCacheTags = [],
+    ): int {
+        $qb = $this->getNewQueryBuilder();
+        static::filterBy{{ column }}($qb, $value);
+
+        return static::getQueryBuilderCount(
+            qb: $qb,
+            useQueryCache: $useQueryCache,
+            cacheId: $cacheId,
+            resultCacheTags: $resultCacheTags,
+        );
+    }
+
     public function deleteBy{{ column }}(
         mixed $value,
     ): void {
