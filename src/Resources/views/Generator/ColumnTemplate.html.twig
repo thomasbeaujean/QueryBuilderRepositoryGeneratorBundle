@@ -1,27 +1,20 @@
 
     public static function filterBy{{ column }}(
         QueryBuilder $qb,
-        $value,
+        mixed $value,
         $operator = Comparison::EQ,
         $entityName = self::NAME,
         $columnName = '{{ columnDql }}',
+        string $columnNamePrefix = '',
+        string $columnNameSuffix = '',
     ): QueryBuilder {
-        if ($value === null) {
-            if (Comparison::NEQ === $operator) {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
-            } else {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
-            }
-        } else {
-            //get a uniq index
-            $index = static::getParameterIndex();
-            $parameterName = $columnName.$index;
-
-            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
-            $qb->setParameter($parameterName, $value);
-        }
-
-        return $qb;
+        return self::filterBy(
+            qb: $qb,
+            columnName: $columnName,
+            operator: $operator,
+            value: $value,
+            entityName: $entityName,
+        );
     }
 
     public static function filterIn{{ column }}(

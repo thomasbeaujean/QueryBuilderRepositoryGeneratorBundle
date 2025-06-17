@@ -332,18 +332,28 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
         QueryBuilder $qb,
         string $columnName,
         string $operator,
-        string $value,
+        mixed $value,
         ?string $entityName = null,
+        string $columnNamePrefix = '',
+        string $columnNameSuffix = '',
     ): QueryBuilder {
         if (null === $entityName) {
             $entityName = self::NAME;
         }
 
-        $index = static::getParameterIndex();
-        $parameterName = $columnName.$index;
+        if ($value === null) {
+            if (Comparison::NEQ === $operator) {
+                $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
+            } else {
+                $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+            }
+        } else {
+            $index = static::getParameterIndex();
+            $parameterName = $columnName.$index;
 
-        $qb->andWhere($entityName.'.'.$columnName.' '.$operator.' :'.$parameterName);
-        $qb->setParameter($parameterName, $value);
+            $qb->andWhere($columnNamePrefix.$entityName.'.'.$columnName.' '.$columnNameSuffix.' '.$operator.' :'.$parameterName);
+            $qb->setParameter($parameterName, $value);
+        }
 
         return $qb;
     }

@@ -314,18 +314,28 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         QueryBuilder $qb,
         string $columnName,
         string $operator,
-        string $value,
+        mixed $value,
         ?string $entityName = null,
+        string $columnNamePrefix = '',
+        string $columnNameSuffix = '',
     ): QueryBuilder {
         if (null === $entityName) {
             $entityName = self::NAME;
         }
 
-        $index = static::getParameterIndex();
-        $parameterName = $columnName.$index;
+        if ($value === null) {
+            if (Comparison::NEQ === $operator) {
+                $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
+            } else {
+                $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
+            }
+        } else {
+            $index = static::getParameterIndex();
+            $parameterName = $columnName.$index;
 
-        $qb->andWhere($entityName.'.'.$columnName.' '.$operator.' :'.$parameterName);
-        $qb->setParameter($parameterName, $value);
+            $qb->andWhere($columnNamePrefix.$entityName.'.'.$columnName.' '.$columnNameSuffix.' '.$operator.' :'.$parameterName);
+            $qb->setParameter($parameterName, $value);
+        }
 
         return $qb;
     }
@@ -352,27 +362,20 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterById(
         QueryBuilder $qb,
-        $value,
+        mixed $value,
         $operator = Comparison::EQ,
         $entityName = self::NAME,
         $columnName = 'id',
+        string $columnNamePrefix = '',
+        string $columnNameSuffix = '',
     ): QueryBuilder {
-        if ($value === null) {
-            if (Comparison::NEQ === $operator) {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
-            } else {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
-            }
-        } else {
-            //get a uniq index
-            $index = static::getParameterIndex();
-            $parameterName = $columnName.$index;
-
-            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
-            $qb->setParameter($parameterName, $value);
-        }
-
-        return $qb;
+        return self::filterBy(
+            qb: $qb,
+            columnName: $columnName,
+            operator: $operator,
+            value: $value,
+            entityName: $entityName,
+        );
     }
 
     public static function filterInId(
@@ -504,27 +507,20 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterByNumber(
         QueryBuilder $qb,
-        $value,
+        mixed $value,
         $operator = Comparison::EQ,
         $entityName = self::NAME,
         $columnName = 'number',
+        string $columnNamePrefix = '',
+        string $columnNameSuffix = '',
     ): QueryBuilder {
-        if ($value === null) {
-            if (Comparison::NEQ === $operator) {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
-            } else {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
-            }
-        } else {
-            //get a uniq index
-            $index = static::getParameterIndex();
-            $parameterName = $columnName.$index;
-
-            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
-            $qb->setParameter($parameterName, $value);
-        }
-
-        return $qb;
+        return self::filterBy(
+            qb: $qb,
+            columnName: $columnName,
+            operator: $operator,
+            value: $value,
+            entityName: $entityName,
+        );
     }
 
     public static function filterInNumber(
@@ -656,27 +652,20 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterByName(
         QueryBuilder $qb,
-        $value,
+        mixed $value,
         $operator = Comparison::EQ,
         $entityName = self::NAME,
         $columnName = 'name',
+        string $columnNamePrefix = '',
+        string $columnNameSuffix = '',
     ): QueryBuilder {
-        if ($value === null) {
-            if (Comparison::NEQ === $operator) {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
-            } else {
-                $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
-            }
-        } else {
-            //get a uniq index
-            $index = static::getParameterIndex();
-            $parameterName = $columnName.$index;
-
-            $qb->andWhere($entityName.'.'.$columnName.$operator.':'.$parameterName);
-            $qb->setParameter($parameterName, $value);
-        }
-
-        return $qb;
+        return self::filterBy(
+            qb: $qb,
+            columnName: $columnName,
+            operator: $operator,
+            value: $value,
+            entityName: $entityName,
+        );
     }
 
     public static function filterInName(
