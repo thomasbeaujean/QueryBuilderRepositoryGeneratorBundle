@@ -10,7 +10,7 @@ interface FilterByInterface
         QueryBuilder $qb,
         string $columnName,
         string $operator,
-        string $value,
+        mixed $value,
         ?string $entityName = null,
     ): QueryBuilder;
 }
