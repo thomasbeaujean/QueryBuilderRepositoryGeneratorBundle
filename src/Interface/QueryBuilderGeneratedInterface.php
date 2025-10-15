@@ -6,6 +6,8 @@ use Doctrine\ORM\QueryBuilder;
 
 interface QueryBuilderGeneratedInterface
 {
+    public static function getName(): string;
+
     public function findOne(
         mixed $id,
         bool $useQueryCache = false,
