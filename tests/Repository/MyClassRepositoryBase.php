@@ -419,12 +419,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findById(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): array {
         $qb = $this->getNewQueryBuilder();
-        static::filterById($qb, $value);
+        static::filterById($qb, $value, $operator);
 
         return $this->getQueryBuilderResult(
             qb: $qb,
@@ -436,13 +437,14 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findOneById(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         $qb = $this->getNewQueryBuilder();
-        static::filterById($qb, $value);
+        static::filterById($qb, $value, $operator);
 
         if ($allowNull) {
             return $this->getQueryBuilderOneOrNullResult(
@@ -463,12 +465,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function countById(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): int {
         $qb = $this->getNewQueryBuilder();
-        static::filterById($qb, $value);
+        static::filterById($qb, $value, $operator);
 
         return static::getQueryBuilderCount(
             qb: $qb,
@@ -480,12 +483,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function existsById(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
-        static::filterById($qb, $value);
+        static::filterById($qb, $value, $operator);
 
         return static::existsByQueryBuilder(
             qb: $qb,
@@ -564,12 +568,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findByNumber(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): array {
         $qb = $this->getNewQueryBuilder();
-        static::filterByNumber($qb, $value);
+        static::filterByNumber($qb, $value, $operator);
 
         return $this->getQueryBuilderResult(
             qb: $qb,
@@ -581,13 +586,14 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findOneByNumber(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         $qb = $this->getNewQueryBuilder();
-        static::filterByNumber($qb, $value);
+        static::filterByNumber($qb, $value, $operator);
 
         if ($allowNull) {
             return $this->getQueryBuilderOneOrNullResult(
@@ -608,12 +614,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function countByNumber(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): int {
         $qb = $this->getNewQueryBuilder();
-        static::filterByNumber($qb, $value);
+        static::filterByNumber($qb, $value, $operator);
 
         return static::getQueryBuilderCount(
             qb: $qb,
@@ -625,12 +632,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function existsByNumber(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
-        static::filterByNumber($qb, $value);
+        static::filterByNumber($qb, $value, $operator);
 
         return static::existsByQueryBuilder(
             qb: $qb,
@@ -709,12 +717,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findByName(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): array {
         $qb = $this->getNewQueryBuilder();
-        static::filterByName($qb, $value);
+        static::filterByName($qb, $value, $operator);
 
         return $this->getQueryBuilderResult(
             qb: $qb,
@@ -726,13 +735,14 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findOneByName(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): ?\Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass {
         $qb = $this->getNewQueryBuilder();
-        static::filterByName($qb, $value);
+        static::filterByName($qb, $value, $operator);
 
         if ($allowNull) {
             return $this->getQueryBuilderOneOrNullResult(
@@ -753,12 +763,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function countByName(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): int {
         $qb = $this->getNewQueryBuilder();
-        static::filterByName($qb, $value);
+        static::filterByName($qb, $value, $operator);
 
         return static::getQueryBuilderCount(
             qb: $qb,
@@ -770,12 +781,13 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function existsByName(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
-        static::filterByName($qb, $value);
+        static::filterByName($qb, $value, $operator);
 
         return static::existsByQueryBuilder(
             qb: $qb,
