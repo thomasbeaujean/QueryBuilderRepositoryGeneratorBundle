@@ -925,6 +925,10 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
+    /**
+     * @return \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass[]
+     *
+     **/
     public function findByForeignClasses(
         mixed $value,
         bool $useQueryCache = false,
