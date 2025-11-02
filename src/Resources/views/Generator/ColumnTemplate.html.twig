@@ -58,12 +58,13 @@
 
     public function findBy{{ column }}(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): array {
         $qb = $this->getNewQueryBuilder();
-        static::filterBy{{ column }}($qb, $value);
+        static::filterBy{{ column }}($qb, $value, $operator);
 
         return $this->getQueryBuilderResult(
             qb: $qb,
@@ -75,13 +76,14 @@
 
     public function findOneBy{{ column }}(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): ?\{{ entityClasspath }} {
         $qb = $this->getNewQueryBuilder();
-        static::filterBy{{ column }}($qb, $value);
+        static::filterBy{{ column }}($qb, $value, $operator);
 
         if ($allowNull) {
             return $this->getQueryBuilderOneOrNullResult(
@@ -102,12 +104,13 @@
 
     public function countBy{{ column }}(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): int {
         $qb = $this->getNewQueryBuilder();
-        static::filterBy{{ column }}($qb, $value);
+        static::filterBy{{ column }}($qb, $value, $operator);
 
         return static::getQueryBuilderCount(
             qb: $qb,
@@ -119,12 +122,13 @@
 
     public function existsBy{{ column }}(
         mixed $value,
+        $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
     ): bool {
         $qb = $this->getNewQueryBuilder();
-        static::filterBy{{ column }}($qb, $value);
+        static::filterBy{{ column }}($qb, $value, $operator);
 
         return static::existsByQueryBuilder(
             qb: $qb,
