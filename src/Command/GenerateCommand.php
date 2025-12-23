@@ -22,7 +22,7 @@ class GenerateCommand extends Command
         $this->repositoryGenerator = $repositoryGenerator;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Regenerate the Base Repository with the Query Builder Repository Generator');
     }
