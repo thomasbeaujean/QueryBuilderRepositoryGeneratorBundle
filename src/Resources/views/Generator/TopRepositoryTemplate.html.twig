@@ -95,7 +95,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
     }
 
     /**
-     * @return \{{rootEntityName}}[]
+     * @return \{{entityClasspath}}[]
      */
     public function getQueryBuilderResult(
         QueryBuilder $qb,
@@ -113,7 +113,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
     }
 
     /**
-     * @return \{{rootEntityName}}
+     * @return \{{entityClasspath}}
      */
     public function getQueryBuilderSingleResult(
         QueryBuilder $qb,
@@ -131,7 +131,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
     }
 
     /**
-     * @return ?\{{rootEntityName}}
+     * @return ?\{{entityClasspath}}
      */
     public function getQueryBuilderOneOrNullResult(
         QueryBuilder $qb,
