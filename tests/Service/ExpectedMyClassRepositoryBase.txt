@@ -417,6 +417,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
+    /**
+     * @return \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass[]
+     */
     public function findById(
         mixed $value,
         $operator = Comparison::EQ,
@@ -566,6 +569,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
+    /**
+     * @return \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass[]
+     */
     public function findByNumber(
         mixed $value,
         $operator = Comparison::EQ,
@@ -715,6 +721,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
         return $qb;
     }
 
+    /**
+     * @return \Tbn\QueryBuilderRepositoryGeneratorBundle\Tests\Entity\MyClass[]
+     */
     public function findByName(
         mixed $value,
         $operator = Comparison::EQ,
