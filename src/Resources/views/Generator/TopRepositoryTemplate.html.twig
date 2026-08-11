@@ -211,7 +211,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
 
     public function getQueryBuilderCount(
         QueryBuilder $qb,
-        $entityName = self::NAME,
+        string $entityName = self::NAME,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -229,7 +229,7 @@ class {{ entityClassname }}Base extends {{ extendClass }}{% if useInterfaces %} 
 {% if idType %}
 
     public function exists(
-        $entity,
+        mixed $entity,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],

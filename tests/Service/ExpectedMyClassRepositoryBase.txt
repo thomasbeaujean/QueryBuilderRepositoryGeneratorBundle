@@ -201,7 +201,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function getQueryBuilderCount(
         QueryBuilder $qb,
-        $entityName = self::NAME,
+        string $entityName = self::NAME,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -218,7 +218,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     }
 
     public function exists(
-        $entity,
+        mixed $entity,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -363,9 +363,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterById(
         QueryBuilder $qb,
         mixed $value,
-        $operator = Comparison::EQ,
-        $entityName = self::NAME,
-        $columnName = 'id',
+        string $operator = Comparison::EQ,
+        string $entityName = self::NAME,
+        string $columnName = 'id',
         string $columnNamePrefix = '',
         string $columnNameSuffix = '',
     ): QueryBuilder {
@@ -375,14 +375,16 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
             operator: $operator,
             value: $value,
             entityName: $entityName,
+            columnNamePrefix: $columnNamePrefix,
+            columnNameSuffix: $columnNameSuffix,
         );
     }
 
     public static function filterInId(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = 'id',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = 'id',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
@@ -399,9 +401,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterNotInId(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = 'id',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = 'id',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -422,7 +424,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
      */
     public function findById(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -440,7 +442,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findOneById(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
@@ -468,7 +470,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function countById(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -486,7 +488,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function existsById(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -504,8 +506,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function deleteById(
         mixed $value,
-    ): void
-    {
+    ): void {
         $qb = $this->getDeleteQueryBuilder();
         static::filterById($qb, $value);
 
@@ -515,9 +516,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterByNumber(
         QueryBuilder $qb,
         mixed $value,
-        $operator = Comparison::EQ,
-        $entityName = self::NAME,
-        $columnName = 'number',
+        string $operator = Comparison::EQ,
+        string $entityName = self::NAME,
+        string $columnName = 'number',
         string $columnNamePrefix = '',
         string $columnNameSuffix = '',
     ): QueryBuilder {
@@ -527,14 +528,16 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
             operator: $operator,
             value: $value,
             entityName: $entityName,
+            columnNamePrefix: $columnNamePrefix,
+            columnNameSuffix: $columnNameSuffix,
         );
     }
 
     public static function filterInNumber(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = 'number',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = 'number',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
@@ -551,9 +554,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterNotInNumber(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = 'number',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = 'number',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -574,7 +577,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
      */
     public function findByNumber(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -592,7 +595,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findOneByNumber(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
@@ -620,7 +623,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function countByNumber(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -638,7 +641,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function existsByNumber(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -656,8 +659,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function deleteByNumber(
         mixed $value,
-    ): void
-    {
+    ): void {
         $qb = $this->getDeleteQueryBuilder();
         static::filterByNumber($qb, $value);
 
@@ -667,9 +669,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     public static function filterByName(
         QueryBuilder $qb,
         mixed $value,
-        $operator = Comparison::EQ,
-        $entityName = self::NAME,
-        $columnName = 'name',
+        string $operator = Comparison::EQ,
+        string $entityName = self::NAME,
+        string $columnName = 'name',
         string $columnNamePrefix = '',
         string $columnNameSuffix = '',
     ): QueryBuilder {
@@ -679,14 +681,16 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
             operator: $operator,
             value: $value,
             entityName: $entityName,
+            columnNamePrefix: $columnNamePrefix,
+            columnNameSuffix: $columnNameSuffix,
         );
     }
 
     public static function filterInName(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = 'name',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = 'name',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
@@ -703,9 +707,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterNotInName(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = 'name',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = 'name',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -726,7 +730,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
      */
     public function findByName(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -744,7 +748,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function findOneByName(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
@@ -772,7 +776,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function countByName(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -790,7 +794,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function existsByName(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -808,8 +812,7 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public function deleteByName(
         mixed $value,
-    ): void
-    {
+    ): void {
         $qb = $this->getDeleteQueryBuilder();
         static::filterByName($qb, $value);
 
@@ -817,9 +820,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
     }
     public static function joinForeignClasses(
         QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = 'foreignClasses',
-        $entityDqlTargeted = 'foreignClass',
+        string $entityName = self::NAME,
+        string $columnName = 'foreignClasses',
+        string $entityDqlTargeted = 'foreignClass',
     ): QueryBuilder {
         $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
 
@@ -828,9 +831,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function leftJoinForeignClasses(
         QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = 'foreignClasses',
-        $entityDqlTargeted = 'foreignClass',
+        string $entityName = self::NAME,
+        string $columnName = 'foreignClasses',
+        string $entityDqlTargeted = 'foreignClass',
     ): QueryBuilder {
         $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
 
@@ -839,10 +842,10 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterByForeignClasses(
         QueryBuilder $qb,
-        $value,
-        $operator = Comparison::EQ,
-        $entityName = self::NAME,
-        $columnName = 'foreignClasses',
+        mixed $value,
+        string $operator = Comparison::EQ,
+        string $entityName = self::NAME,
+        string $columnName = 'foreignClasses',
     ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
@@ -881,9 +884,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterInForeignClasses(
         QueryBuilder $qb,
-        $values,
-        $entityName = self::NAME,
-        $columnName = 'foreignClasses',
+        ?array $values,
+        string $entityName = self::NAME,
+        string $columnName = 'foreignClasses',
     ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
@@ -921,9 +924,9 @@ class MyClassRepositoryBase extends \Doctrine\Bundle\DoctrineBundle\Repository\S
 
     public static function filterNotInForeignClasses(
         QueryBuilder $qb,
-        $values,
-        $entityName = self::NAME,
-        $columnName = 'foreignClasses',
+        ?array $values,
+        string $entityName = self::NAME,
+        string $columnName = 'foreignClasses',
     ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
