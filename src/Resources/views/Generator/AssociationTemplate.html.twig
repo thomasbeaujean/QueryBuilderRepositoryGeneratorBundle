@@ -1,8 +1,8 @@
     public static function join{{ column }}(
         QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
-        $entityDqlTargeted = '{{ entityDqlTargeted }}',
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
+        string $entityDqlTargeted = '{{ entityDqlTargeted }}',
     ): QueryBuilder {
         $qb->join($entityName.'.'.$columnName, $entityDqlTargeted);
 
@@ -11,9 +11,9 @@
 
     public static function leftJoin{{ column }}(
         QueryBuilder $qb,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
-        $entityDqlTargeted = '{{ entityDqlTargeted }}',
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
+        string $entityDqlTargeted = '{{ entityDqlTargeted }}',
     ): QueryBuilder {
         $qb->leftJoin($entityName.'.'.$columnName, $entityDqlTargeted);
 
@@ -23,10 +23,10 @@
 {% if idType %}
     public static function filterBy{{ column }}(
         QueryBuilder $qb,
-        $value,
-        $operator = Comparison::EQ,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
+        mixed $value,
+        string $operator = Comparison::EQ,
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
@@ -70,9 +70,9 @@
 
     public static function filterIn{{ column }}(
         QueryBuilder $qb,
-        $values,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
+        ?array $values,
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();
@@ -110,9 +110,9 @@
 
     public static function filterNotIn{{ column }}(
         QueryBuilder $qb,
-        $values,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
+        ?array $values,
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         //get a uniq index
         $index = static::getParameterIndex();

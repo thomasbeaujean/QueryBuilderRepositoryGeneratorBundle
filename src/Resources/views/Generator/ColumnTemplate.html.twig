@@ -2,9 +2,9 @@
     public static function filterBy{{ column }}(
         QueryBuilder $qb,
         mixed $value,
-        $operator = Comparison::EQ,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
+        string $operator = Comparison::EQ,
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
         string $columnNamePrefix = '',
         string $columnNameSuffix = '',
     ): QueryBuilder {
@@ -14,14 +14,16 @@
             operator: $operator,
             value: $value,
             entityName: $entityName,
+            columnNamePrefix: $columnNamePrefix,
+            columnNameSuffix: $columnNameSuffix,
         );
     }
 
     public static function filterIn{{ column }}(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NULL');
@@ -38,9 +40,9 @@
 
     public static function filterNotIn{{ column }}(
         QueryBuilder $qb,
-        $value,
-        $entityName = self::NAME,
-        $columnName = '{{ columnDql }}',
+        mixed $value,
+        string $entityName = self::NAME,
+        string $columnName = '{{ columnDql }}',
     ): QueryBuilder {
         if ($value === null) {
             $qb->andWhere($entityName.'.'.$columnName.' IS NOT NULL');
@@ -61,7 +63,7 @@
      */
     public function findBy{{ column }}(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -79,7 +81,7 @@
 
     public function findOneBy{{ column }}(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $allowNull = false,
         bool $useQueryCache = false,
         ?string $cacheId = null,
@@ -107,7 +109,7 @@
 
     public function countBy{{ column }}(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -125,7 +127,7 @@
 
     public function existsBy{{ column }}(
         mixed $value,
-        $operator = Comparison::EQ,
+        string $operator = Comparison::EQ,
         bool $useQueryCache = false,
         ?string $cacheId = null,
         array $resultCacheTags = [],
@@ -143,8 +145,7 @@
 
     public function deleteBy{{ column }}(
         mixed $value,
-    ): void
-    {
+    ): void {
         $qb = $this->getDeleteQueryBuilder();
         static::filterBy{{ column }}($qb, $value);
 
